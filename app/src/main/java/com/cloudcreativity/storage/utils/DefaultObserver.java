@@ -22,7 +22,7 @@ public abstract class DefaultObserver<T extends BaseResult> implements Observer<
         this.impl = impl;
     }
     protected DefaultObserver(BaseDialogImpl impl ,boolean isShowProgress){
-        this.impl = impl;
+        this(impl);
         if(isShowProgress)
             impl.showProgress("请稍后");
     }
@@ -66,56 +66,18 @@ public abstract class DefaultObserver<T extends BaseResult> implements Observer<
             if(t.getStatus()==1){
                 onSuccess(t);
             }else{
-                onFail(ExceptionReason.PARSE_ERROR);
-                impl.showRequestErrorMessage("解析失败");
+                impl.showRequestErrorMessage("系统异常");
             }
         }
-//        if(t instanceof String){
-//            try {
-//                JSONObject object = new JSONObject((String)t);
-//                if(object.getString("status").equals("1")){
-//                    //成功
-//                    if(TextUtils.isEmpty(object.getString("info"))){
-//                        //说明当前的字符串是空的,模拟出空的json串
-//                        onSuccess("{}");
-//                    }else{
-//                        try{
-//                            JSONObject info = object.getJSONObject("info");
-//                            onSuccess(info.toString());
-//                        }catch (JSONException e){
-//                            //说明info不是json对象
-//                            onSuccess(object.getString("info"));
-//                        }
-//                    }
-//                }else if(object.getString("status").equals("100")){
-//                    //用户权限出问题,账号在别处登录
-//                    //先清空用户数据
-//                    SPUtils.get().putBoolean(SPUtils.Config.IS_LOGIN,false);
-//                    SPUtils.get().putInt(SPUtils.Config.UID,0);
-//                    SPUtils.get().putString(SPUtils.Config.TOKEN,null);
-//                    onFail(ExceptionReason.PARAMS_ERROR);
-//                    impl.showUserAuthOutDialog();
-//                }else{
-//                    //失败
-//                    if(!object.has("msg")||TextUtils.isEmpty(object.getString("msg"))){
-//                        impl.showRequestErrorMessage("请求失败");
-//                    }else{
-//                        impl.showRequestErrorMessage(object.getString("msg"));
-//                    }
-//                    onFail(ExceptionReason.PARAMS_ERROR);
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//                onFail(ExceptionReason.PARSE_ERROR);
-//            }
-//        }else{
-//            //烂逼接口，数据无法用框架解析，需要进行自己解析
-//            onSuccess("{}");
-//        }
     }
     public abstract void onSuccess(T t);
 
-    public abstract void onFail(ExceptionReason msg);
+    /**
+     * @param msg 原因
+     */
+    public  void onFail(ExceptionReason msg){
+
+    }
 
     /**
      * 请求网络失败原因

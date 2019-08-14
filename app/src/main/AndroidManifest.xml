@@ -3,6 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cloudcreativity.storage">
 
+    <!--百度地图权限-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -81,6 +91,9 @@
         <activity android:name=".ui.buyPrice.ProviderActivity" android:screenOrientation="portrait" android:launchMode="singleTask"/>
         <activity android:name=".ui.buyPrice.PriceActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.buyPrice.AddProviderActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.enter.EnterGoodsListActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.config.PrinterActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".ui.out.OutGoodsActivity" android:screenOrientation="portrait"/>
 
 
         <!-- Activity配置结束 -->
@@ -96,6 +109,16 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filespath" />
         </provider>
+
+
+
+        <!--百度地图定位服务-->
+        <service android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="3MrhzFNGE89WhrnzU9rOLhKMSssFdW8k" />
     </application>
 
 </manifest>

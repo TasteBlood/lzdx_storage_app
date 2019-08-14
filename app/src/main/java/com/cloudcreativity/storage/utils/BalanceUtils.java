@@ -53,7 +53,8 @@ public class BalanceUtils {
     public void release() throws IOException {
         if(task!=null)
             task.setStart(false);
-        socket.close();
+        if(socket!=null)
+            socket.close();
         socket = null;
         utils = null;
     }

@@ -3,6 +3,7 @@ package com.cloudcreativity.storage.ui.goods;
 import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.cloudcreativity.storage.R;
@@ -10,23 +11,34 @@ import com.cloudcreativity.storage.base.BaseActivity;
 import com.cloudcreativity.storage.base.BaseBindingRecyclerViewAdapter;
 import com.cloudcreativity.storage.base.BaseDialogImpl;
 import com.cloudcreativity.storage.base.BaseModel;
+import com.cloudcreativity.storage.base.CommonWebActivity;
 import com.cloudcreativity.storage.databinding.ActivityGoodsBinding;
 import com.cloudcreativity.storage.databinding.ItemLayoutGoodsBinding;
 import com.cloudcreativity.storage.entity.Category;
-import com.cloudcreativity.storage.entity.Goods;
+import com.cloudcreativity.storage.entity.StoreGoods;
 import com.cloudcreativity.storage.utils.CategoryWindowUtils;
+import com.cloudcreativity.storage.utils.DefaultObserver;
+import com.cloudcreativity.storage.utils.HttpUtils;
 import com.cloudcreativity.storage.utils.QrCodeDialogUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
-import java.util.ArrayList;
-import java.util.List;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
 
-    public BaseBindingRecyclerViewAdapter<Goods.Entity, ItemLayoutGoodsBinding> adapter;
+    public BaseBindingRecyclerViewAdapter<StoreGoods.Entity, ItemLayoutGoodsBinding> adapter;
     private CategoryWindowUtils popupWindow;
     public ObservableField<String> selectCategory;
+
+    private int pageNum = 1;
+    private int size = 10;
+    public ObservableField<String> key = new ObservableField<>();
+    private Integer oneId = 0;
+    private Integer twoId = 0;
+
     GoodsModel(BaseActivity context, ActivityGoodsBinding binding, BaseDialogImpl baseDialog) {
         super(context, binding, baseDialog);
     }
@@ -45,40 +57,38 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
         binding.rcvGoods.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
         binding.refreshGoods.setOnRefreshListener(new RefreshListenerAdapter() {
             @Override
-            public void onFinishRefresh() {
-
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                pageNum = 1;
+                loadData(pageNum,size,oneId,twoId,key.get());
             }
 
             @Override
-            public void onFinishLoadMore() {
-
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                loadData(pageNum,size,oneId,twoId,key.get());
             }
         });
     }
 
     @Override
     protected void initData() {
-        adapter = new BaseBindingRecyclerViewAdapter<Goods.Entity, ItemLayoutGoodsBinding>(context) {
+        adapter = new BaseBindingRecyclerViewAdapter<StoreGoods.Entity, ItemLayoutGoodsBinding>(context) {
             @Override
             protected int getLayoutResId(int viewType) {
                 return R.layout.item_layout_goods;
             }
 
             @Override
-            protected void onBindItem(ItemLayoutGoodsBinding binding, Goods.Entity item, int position) {
+            protected void onBindItem(ItemLayoutGoodsBinding binding, final StoreGoods.Entity item, int position) {
                 binding.setItem(item);
 
-                binding.tvEnter.setOnClickListener(new View.OnClickListener() {
+                binding.tvEnterOut.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        context.startActivity(new Intent(context,EnterRecordActivity.class));
-                    }
-                });
-
-                binding.tvOut.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        context.startActivity(new Intent(context,OutRecordActivity.class));
+                        if(TextUtils.isEmpty(item.getBarCode())){
+                            ToastUtils.showShortToast(context,"暂无出入库信息");
+                        }else{
+                            CommonWebActivity.startActivity(context,item.getBarCode());
+                        }
                     }
                 });
 
@@ -87,7 +97,7 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
                     public void onClick(View view) {
                         new QrCodeDialogUtils(context,
                                 R.style.myProgressDialogStyle,
-                                "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564567206061&di=29c0854ea69e0c3cc615d14e3f42182b&imgtype=0&src=http%3A%2F%2Fmmbiz.qpic.cn%2Fmmbiz_png%2FF0ia7S03R9rBxzF51Uj2rBxS5czVyTRYia2Y018uIsmqsfzAmNJz5w1Z7flQsWjZVdf9z0zoIFOic8j9uR5hxgNQw%2F640%3Fwx_fmt%3Dpng").show();
+                                item.getBarCode()).show();
                     }
                 });
 
@@ -98,12 +108,14 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
                     }
                 });
             }
+
+            @Override
+            public int getItemViewType(int position) {
+                return super.getItemViewType(position);
+            }
         };
-        List<Goods.Entity> entities = new ArrayList<>();
-        for(int i=0;i<=10;i++){
-            entities.add(new Goods.Entity());
-        }
-        adapter.getItems().addAll(entities);
+
+        binding.refreshGoods.startRefresh();
     }
 
     public void onCategoryClick(){
@@ -118,19 +130,72 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
                 public void onChoose(Category.Entity one, Category.Entity two) {
                     if(one!=null){
                         selectCategory.set(one.getName());
+                        oneId = one.getId();
                     }
                     if(two!=null){
                         selectCategory.set(selectCategory.get()+"/"+two.getName());
+                        twoId = two.getId();
                     }
+                    binding.refreshGoods.startRefresh();
                 }
 
                 @Override
                 public void onClear() {
                     selectCategory.set("类别筛选");
+                    oneId = 0;
+                    twoId = 0;
+                    binding.refreshGoods.startRefresh();
                 }
             });
         }
 
         popupWindow.show();
+    }
+
+    public void onSearch(){
+        binding.refreshGoods.startRefresh();
+    }
+
+    private void loadData(final int page, int size, int oneId, int twoId, String key){
+        HttpUtils.getInstance().getStoreGoods(page,size,key)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<StoreGoods>(getBaseDialog(),false) {
+                    @Override
+                    public void onSuccess(StoreGoods storeGoods) {
+                        if(page==1){
+                            binding.refreshGoods.finishRefreshing();
+                            adapter.getItems().clear();
+                        }else{
+                            binding.refreshGoods.finishLoadmore();
+                        }
+
+                        if(storeGoods.getInfo().getList().isEmpty()){
+                            if(storeGoods.getInfo().isLastPage()){
+                                binding.refreshGoods.setEnableLoadmore(false);
+                            }else{
+                                binding.refreshGoods.setEnableLoadmore(true);
+                            }
+                        }else{
+                            if(storeGoods.getInfo().isLastPage()){
+                                binding.refreshGoods.setEnableLoadmore(false);
+                            }else{
+                                binding.refreshGoods.setEnableLoadmore(true);
+                            }
+                            adapter.getItems().addAll(storeGoods.getInfo().getList());
+                            pageNum ++;
+                        }
+                    }
+
+                    @Override
+                    public void onFail(ExceptionReason msg) {
+                        super.onFail(msg);
+                        if(page==1){
+                            binding.refreshGoods.finishRefreshing();
+                        }else{
+                            binding.refreshGoods.finishLoadmore();
+                        }
+                    }
+                });
     }
 }

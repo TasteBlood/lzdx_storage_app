@@ -22,6 +22,7 @@
             android:layout_height="?android:attr/actionBarSize" />
         <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
             android:id="@+id/refresh_price"
+            app:tr_enable_loadmore="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <android.support.v7.widget.RecyclerView
@@ -29,7 +30,7 @@
                 android:adapter="@{model.adapter}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-            <include layout="@layout/layout_no_data" android:visibility="gone" android:id="@+id/noData"/>
+            <include layout="@layout/layout_no_data" android:visibility="gone" android:id="@+id/noData" android:layout_width="match_parent" android:layout_height="match_parent"/>
         </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
     </LinearLayout>
 </layout>

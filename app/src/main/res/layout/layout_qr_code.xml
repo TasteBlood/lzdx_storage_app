@@ -16,7 +16,6 @@
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_qr_code"
             android:scaleType="fitXY"
-            qrCodeUrl="@{utils.qrCodeUrl}"
             android:layout_width="200dip"
             android:layout_height="200dip" />
         <TextView

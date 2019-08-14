@@ -1,48 +1,142 @@
 package com.cloudcreativity.storage.entity;
 
 import com.cloudcreativity.storage.base.BaseResult;
+import com.cloudcreativity.storage.utils.StrUtils;
 
 import java.util.List;
 
+/**
+ * All Rights Reserved By CloudCreativity Tech.
+ *
+ * @author : created by Xu Xiwu
+ * date-time: 2019/8/9 14:36
+ * e-mail: xxw0701@sina.com
+ */
 public class Goods extends BaseResult{
 
-    private Page info;
+    private Info info;
 
-    public Page getInfo() {
+    public Info getInfo() {
         return info;
     }
 
-    public void setInfo(Page info) {
+    public void setInfo(Info info) {
         this.info = info;
     }
 
-    public class Page{
-        private List<Entity> records;
+    public class Info{
+        private List<Entity> resultlist;
 
-        public List<Entity> getRecords() {
-            return records;
+        public List<Entity> getResultlist() {
+            return resultlist;
         }
 
-        public void setRecords(List<Entity> records) {
-            this.records = records;
+        public void setResultlist(List<Entity> resultlist) {
+            this.resultlist = resultlist;
         }
     }
 
-    public static class Entity{
-        private String name;
-        private String unit;
-        private int number;
-        private String providerName;
-        private int warnNum;
-        private float money;
-        private String area;
+    public class Entity{
+        private int id;
+        private int categoryOneId;
+        private int categoryTwoId;
+        private String goodsName;
+        private int unitId;
+        private String createTime;
+        private String unitName;
+        private List<Specs> specsDomains;
 
-        public String getArea() {
-            return area;
+        public int getId() {
+            return id;
         }
 
-        public void setArea(String area) {
-            this.area = area;
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getCategoryOneId() {
+            return categoryOneId;
+        }
+
+        public void setCategoryOneId(int categoryOneId) {
+            this.categoryOneId = categoryOneId;
+        }
+
+        public int getCategoryTwoId() {
+            return categoryTwoId;
+        }
+
+        public void setCategoryTwoId(int categoryTwoId) {
+            this.categoryTwoId = categoryTwoId;
+        }
+
+        public String getGoodsName() {
+            return goodsName;
+        }
+
+        public void setGoodsName(String goodsName) {
+            this.goodsName = goodsName;
+        }
+
+        public int getUnitId() {
+            return unitId;
+        }
+
+        public void setUnitId(int unitId) {
+            this.unitId = unitId;
+        }
+
+        public String getCreateTime() {
+            return createTime;
+        }
+
+        public void setCreateTime(String createTime) {
+            this.createTime = createTime;
+        }
+
+        public String getUnitName() {
+            return unitName;
+        }
+
+        public void setUnitName(String unitName) {
+            this.unitName = unitName;
+        }
+
+        public List<Specs> getSpecsDomains() {
+            return specsDomains;
+        }
+
+        public void setSpecsDomains(List<Specs> specsDomains) {
+            this.specsDomains = specsDomains;
+        }
+    }
+
+    public class Specs{
+        private int id;
+        private int goodsId;
+        private String name;
+        private String createTime;
+        private String number;
+        private int price;
+
+        public String formatPrice(){
+            return "￥"+ StrUtils.get2BitDecimal(price/100f);
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getGoodsId() {
+            return goodsId;
+        }
+
+        public void setGoodsId(int goodsId) {
+            this.goodsId = goodsId;
         }
 
         public String getName() {
@@ -53,44 +147,28 @@ public class Goods extends BaseResult{
             this.name = name;
         }
 
-        public String getUnit() {
-            return unit;
+        public String getCreateTime() {
+            return createTime;
         }
 
-        public void setUnit(String unit) {
-            this.unit = unit;
+        public void setCreateTime(String createTime) {
+            this.createTime = createTime;
         }
 
-        public int getNumber() {
+        public String getNumber() {
             return number;
         }
 
-        public void setNumber(int number) {
+        public void setNumber(String number) {
             this.number = number;
         }
 
-        public String getProviderName() {
-            return providerName;
+        public int getPrice() {
+            return price;
         }
 
-        public void setProviderName(String providerName) {
-            this.providerName = providerName;
-        }
-
-        public int getWarnNum() {
-            return warnNum;
-        }
-
-        public void setWarnNum(int warnNum) {
-            this.warnNum = warnNum;
-        }
-
-        public float getMoney() {
-            return money;
-        }
-
-        public void setMoney(float money) {
-            this.money = money;
+        public void setPrice(int price) {
+            this.price = price;
         }
     }
 }

@@ -5,7 +5,7 @@
 
         <variable
             name="item"
-            type="com.cloudcreativity.storage.entity.Goods.Entity" />
+            type="com.cloudcreativity.storage.entity.StoreGoods.Entity" />
     </data>
 
     <LinearLayout
@@ -42,7 +42,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="山西面粉"
+                    android:text="@{item.goodsName}"
                     android:textColor="@color/gray_414141" />
             </LinearLayout>
 
@@ -61,7 +61,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="校本部二层"
+                    android:text="@{item.position}"
                     android:textColor="@color/gray_414141" />
             </LinearLayout>
         </LinearLayout>
@@ -90,7 +90,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="¥20.00"
+                    android:text="@{item.formatPrice()}"
                     android:textColor="@color/gray_414141" />
             </LinearLayout>
 
@@ -109,7 +109,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="山西大同面馆"
+                    android:text="@{item.providerName}"
                     android:textColor="@color/gray_414141" />
             </LinearLayout>
         </LinearLayout>
@@ -137,7 +137,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="200"
+                    android:text="@{String.valueOf(item.stock)}"
                     android:textColor="@color/colorAccent" />
             </LinearLayout>
 
@@ -156,7 +156,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="斤"
+                    android:text="@{item.unitName}"
                     android:textColor="@color/gray_414141" />
             </LinearLayout>
 
@@ -171,12 +171,12 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="预警值:" />
+                    android:text="规格:" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100"
+                    android:text="@{item.specsName}"
                     android:textColor="@color/gray_414141" />
             </LinearLayout>
         </LinearLayout>
@@ -207,7 +207,7 @@
                 android:layout_marginEnd="10dip"
                 android:text="二维码"/>
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tv_enter"
+                android:id="@+id/tv_enter_out"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="5dip"
@@ -217,19 +217,7 @@
                 android:drawableStart="@mipmap/ic_enter_record"
                 android:drawablePadding="5dip"
                 android:layout_marginEnd="10dip"
-                android:text="入库记录"/>
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/tv_out"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dip"
-                android:drawablePadding="5dip"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginEnd="10dip"
-                android:drawableStart="@mipmap/ic_out_record"
-                android:text="出库记录"/>
+                android:text="出入库记录"/>
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_check"
                 android:layout_width="wrap_content"
@@ -237,6 +225,7 @@
                 android:padding="5dip"
                 android:drawableStart="@mipmap/ic_check_record"
                 android:drawablePadding="5dip"
+                android:visibility="gone"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"

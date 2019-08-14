@@ -1,15 +1,10 @@
 package com.cloudcreativity.storage.ui.config;
 
-import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -43,13 +38,7 @@ public class BalanceActivity extends BaseActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //申请权限
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-        } else {
-            //init
-            initView();
-        }
+        initView();
     }
 
     //初始化view
@@ -211,20 +200,6 @@ public class BalanceActivity extends BaseActivity {
             });
         }catch (Exception e){
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==100){
-            if(Manifest.permission.ACCESS_COARSE_LOCATION.equals(permissions[0])
-            && PackageManager.PERMISSION_GRANTED==grantResults[0]){
-                initView();
-            }else{
-                ToastUtils.showShortToast(this,"请打开权限");
-                finish();
-            }
         }
     }
 }

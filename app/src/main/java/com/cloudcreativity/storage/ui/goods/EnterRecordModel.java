@@ -11,16 +11,31 @@ import com.cloudcreativity.storage.base.BaseModel;
 import com.cloudcreativity.storage.databinding.ActivityEnterRecordBinding;
 import com.cloudcreativity.storage.databinding.ItemLayoutEnterRecordBinding;
 import com.cloudcreativity.storage.entity.EnterRecord;
+import com.cloudcreativity.storage.entity.StoreGoods;
+import com.cloudcreativity.storage.utils.DefaultObserver;
+import com.cloudcreativity.storage.utils.HttpUtils;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class EnterRecordModel extends BaseModel<BaseActivity, ActivityEnterRecordBinding> {
 
     public BaseBindingRecyclerViewAdapter<EnterRecord.Entity, ItemLayoutEnterRecordBinding> adapter;
 
-    EnterRecordModel(BaseActivity context, ActivityEnterRecordBinding binding, BaseDialogImpl baseDialog) {
+    public StoreGoods.Entity entity;
+
+    private int pageNum = 1;
+    private int size = 10;
+
+    EnterRecordModel(BaseActivity context, ActivityEnterRecordBinding binding, BaseDialogImpl baseDialog, StoreGoods.Entity entity) {
         super(context, binding, baseDialog);
+        this.entity = entity;
     }
 
     @Override
+
     protected void initView() {
         binding.tlbEnterRecord.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +46,19 @@ public class EnterRecordModel extends BaseModel<BaseActivity, ActivityEnterRecor
 
         binding.rcvEnterRecord.setLayoutManager(new LinearLayoutManager(context,
                 LinearLayoutManager.VERTICAL,false));
+
+        binding.refreshEnterRecord.setOnRefreshListener(new RefreshListenerAdapter() {
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                pageNum = 1;
+                loadData(pageNum,size,entity.getId());
+            }
+
+            @Override
+            public void onLoadMore(TwinklingRefreshLayout refreshLayout) {
+                loadData(pageNum,size,entity.getId());
+            }
+        });
     }
 
     @Override
@@ -47,8 +75,57 @@ public class EnterRecordModel extends BaseModel<BaseActivity, ActivityEnterRecor
             }
         };
 
-        for(int i=0;i<20;i++){
-            adapter.getItems().add(new EnterRecord.Entity());
-        }
+        binding.refreshEnterRecord.startRefresh();
+    }
+
+    private void loadData(final int page, int size, int goodsId){
+        HttpUtils.getInstance().getEnterRecords(goodsId,page,size)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<EnterRecord>(getBaseDialog(),false) {
+                    @Override
+                    public void onSuccess(EnterRecord enterRecord) {
+
+                        if (page==1){
+                            binding.refreshEnterRecord.finishRefreshing();
+                        }else{
+                            binding.refreshEnterRecord.finishLoadmore();
+                        }
+
+                        if(enterRecord.getInfo().getList().isEmpty()){
+                            if(page==1){
+                                adapter.getItems().clear();
+                                binding.noData.setVisibility(View.VISIBLE);
+                            }else{
+                                binding.noData.setVisibility(View.GONE);
+                            }
+                        }else{
+
+                            if(page==1){
+                                adapter.getItems().clear();
+                            }
+
+                            if(enterRecord.getInfo().isLastPage()){
+                                binding.refreshEnterRecord.setEnableLoadmore(false);
+                            }else{
+                                binding.refreshEnterRecord.setEnableLoadmore(true);
+                                pageNum ++;
+                            }
+
+                            adapter.getItems().addAll(enterRecord.getInfo().getList());
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFail(ExceptionReason msg) {
+                        if (page==1){
+                            binding.refreshEnterRecord.finishRefreshing();
+                        }else{
+                            binding.refreshEnterRecord.finishLoadmore();
+                        }
+                    }
+                });
     }
 }

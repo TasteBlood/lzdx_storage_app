@@ -4,8 +4,15 @@ import com.cloudcreativity.storage.base.BaseResult;
 import com.cloudcreativity.storage.entity.BuyGoods;
 import com.cloudcreativity.storage.entity.BuyOrder;
 import com.cloudcreativity.storage.entity.Category;
+import com.cloudcreativity.storage.entity.EnterGoods;
+import com.cloudcreativity.storage.entity.EnterRecord;
+import com.cloudcreativity.storage.entity.Goods;
+import com.cloudcreativity.storage.entity.OutGoods;
+import com.cloudcreativity.storage.entity.OutOrder;
+import com.cloudcreativity.storage.entity.OutRecord;
 import com.cloudcreativity.storage.entity.PriceGoods;
 import com.cloudcreativity.storage.entity.Provider;
+import com.cloudcreativity.storage.entity.StoreGoods;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -25,7 +32,7 @@ public interface APIService {
      * 整体的接口配置
      */
     String TEST_HOST = "http://192.168.31.160:8080/";
-    String ONLINE_HOST = "http://192.168.31.160:8080/";
+    String ONLINE_HOST = "http://store-service-landa.lz-cc.com/";
     String HOST_APP = AppConfig.DEBUG ? TEST_HOST : ONLINE_HOST;
 
     //查询分类
@@ -36,12 +43,56 @@ public interface APIService {
     @POST("/order/selectOrder")
     @FormUrlEncoded
     Observable<BuyOrder> getBuyOrders(@Field("page") int page,
-                                      @Field("size") int size);
+                                      @Field("size") int size,
+                                      @Field("surveyState") int surveyState,
+                                      @Field("state") int state);
+
+    //查询入库单
+    @POST("/order/selectOrder")
+    @FormUrlEncoded
+    Observable<BuyOrder> getBoughtOrders(@Field("page") int page,
+                                         @Field("size") int size,
+                                         @Field("state") int state,
+                                         @Field("mainState") int mainState,
+                                         @Field("surveyState") int surveyState);
 
     //查询采购单商品
     @POST("/needgoods/searchGoods")
     @FormUrlEncoded
     Observable<BuyGoods> getBuyGoods(@Field("orderId") int orderId);
+
+    //查询待入库商品
+    /**
+    * @author : xuxiwu
+    * created: 2019/8/2 16:22
+    * desc:
+     * @param orderId 订单Id
+     * @param state = 2
+    */
+    @POST("/surveyGoods/selectAllSurvey")
+    @FormUrlEncoded
+    Observable<EnterGoods> getWaitEnterGoods(@Field("orderId") int orderId,
+                                             @Field("state") int state);
+
+    /**
+    * @author : xuxiwu
+    * created: 2019/8/2 16:22
+    * desc:添加入库
+    */
+    @POST("/enter/addRecord")
+    @FormUrlEncoded
+    Observable<BaseResult> enterStore(@Field("orderId") int orderId,
+                                      @Field("needGoodsId") int needGoodsId,
+                                      @Field("goodsId") int goodsId,
+                                      @Field("providerId") int providerId,
+                                      @Field("storeId") int storeId,
+                                      @Field("specsId") int specsId,
+                                      @Field("unitId") int unitId,
+                                      @Field("price") int price,
+                                      @Field("number") int number,
+                                      @Field("position") String position,
+                                      @Field("address") String address,
+                                      @Field("wayState") int wayState);
 
     //查询全部的供应商
     @POST("/provider/getProviderList")
@@ -88,4 +139,83 @@ public interface APIService {
                                        @Field("realName") String realName,
                                        @Field("address") String address,
                                        @Field("phone") String mobile);
+
+    //获取仓库下的商品
+    @POST("/admin/goodsInfo")
+    @FormUrlEncoded
+    Observable<StoreGoods> getStoreGoods(@Field("page") int page,
+                                         @Field("size") int size,
+                                         @Field("goodsName") String key);
+
+    //入库记录
+    @POST("/enter/recordList")
+    @FormUrlEncoded
+    Observable<EnterRecord> getEnterRecords(@Field("goodsId") int goodsId,
+                                            @Field("page") int page,
+                                            @Field("size") int size);
+
+    //出库记录
+    @POST("/out/recordList")
+    @FormUrlEncoded
+    Observable<OutRecord> getOutRecords(@Field("goodsId") int goodsId,
+                                        @Field("page") int page,
+                                        @Field("size") int size);
+
+    //查询出库单
+    @POST("/storeApply/selectApplyAll")
+    @FormUrlEncoded
+    Observable<OutOrder> getOutList(@Field("state") int state,
+                                    @Field("accountId") int accountId,
+                                    @Field("storeId") int storeId);
+
+    //查询出库单商品
+    @POST("/applyGoods/selectGoodsAll")
+    @FormUrlEncoded
+    Observable<OutGoods> getOutListGoods(@Field("applyId") int applyId);
+
+    //出库
+    @POST("/out/add")
+    @FormUrlEncoded
+    Observable<BaseResult> outRecord(@Field("number") int number,
+                                     @Field("person") String person,
+                                     @Field("address") String address,
+                                     @Field("specsId") int specsId,
+                                     @Field("unitId") int unitId,
+                                     @Field("goodsId") int goodsId,
+                                     @Field("storeId") int storeId,
+                                     @Field("accountId") int accountId,
+                                     @Field("articleId") int articleId,
+                                     @Field("applyId") int applyId);
+
+    //查询原始商品
+    /**
+    * @author : xuxiwu
+    * created: 2019/8/2 16:22
+    * desc:
+     * @param state ==2 餐饮商品
+    */
+    @POST("/goodsCategory/selectGoods")
+    @FormUrlEncoded
+    Observable<Goods> getFullGoods(@Field("categoryOneId") int categoryOneId,
+                                   @Field("categoryTwoId") int categoryTwoId,
+                                   @Field("goodsName") String goodsName,
+                                   @Field("page") int page,
+                                   @Field("size") int size,
+                                   @Field("state") int state);
+
+    //餐饮采价
+    @POST("/surveyInfo/addSurveyInfo")
+    @FormUrlEncoded
+    Observable<BaseResult> addRestaurantPrice(@Field("goodsId") int goodsId,
+                                              @Field("specsId") int specsId,
+                                              @Field("providerId") int providerId,
+                                              @Field("price") int price,
+                                              @Field("remarks") String remarks,
+                                              @Field("address") String address);
+
+    //查询餐饮采价商品
+    @POST("/needgoods/searchAllGoods")
+    @FormUrlEncoded
+    Observable<EnterGoods> getRestaurantGoods(@Field("orderId") int orderId);
+
 }

@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_414141"
-                    android:text="2019年8月12日 23:20:00"/>
+                    android:text="@{item.enterTime}"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,27 +46,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/refresh_green"
-                    android:text="+10"/>
+                    android:text="@{item.formatNumber()}"/>
                 <TextView
                     android:layout_marginStart="20dip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="单位:"/>
+                    android:text="供应商:"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_414141"
-                    android:text="斤"/>
-                <TextView
-                    android:layout_marginStart="20dip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="操作人:"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/gray_414141"
-                    android:text="徐婧姝"/>
+                    android:text="@{item.providerName}"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -82,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/gray_414141"
-                    android:text="观云楼4楼"/>
+                    android:text="@{item.address}"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

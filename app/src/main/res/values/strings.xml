@@ -30,6 +30,11 @@
     <string name="str_agree">同意</string>
     <string name="str_reset_pwd">重置密码</string>
     <string name="str_submit">提交</string>
+    <string name="str_enter_state">已入库</string>
+    <string name="str_wait_state">未入库</string>
+
+    <string name="str_out_state">已出库</string>
+    <string name="str_out_wait">未出库</string>
 
 
 

@@ -1,28 +1,50 @@
 package com.cloudcreativity.storage.utils;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.databinding.BindingAdapter;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
+import android.graphics.Bitmap;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
-import android.widget.ImageView;
 
 import com.cloudcreativity.storage.R;
+import com.cloudcreativity.storage.base.BaseApp;
 import com.cloudcreativity.storage.databinding.LayoutQrCodeBinding;
+import com.cloudcreativity.storage.ui.config.ConfigIndexActivity;
+import com.dothantech.printer.IDzPrinter;
 
 public class QrCodeDialogUtils extends Dialog{
 
     private LayoutQrCodeBinding binding;
     private Context context;
-    public ObservableField<String> qrCodeUrl = new ObservableField<>();
-    public QrCodeDialogUtils(@NonNull Context context, int themeResId,String url) {
+    private String qrCodeUrl;
+    public QrCodeDialogUtils(@NonNull final Context context, int themeResId, final String url) {
         super(context, themeResId);
-        this.qrCodeUrl.set(url);
         this.context = context;
+        this.qrCodeUrl = url;
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_qr_code,null,false);
+        new Thread(){
+            @Override
+            public void run() {
+                final Bitmap qrImage = QRCodeUtils.createQRImage(url, 400, 400);
+                new Handler(context.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(qrImage==null){
+                            ToastUtils.showShortToast(context,"二维码生成失败");
+                            dismiss();
+                        }else{
+                            binding.ivQrCode.setImageBitmap(qrImage);
+                        }
+                    }
+                });
+            }
+        }.start();
         //DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         setContentView(binding.getRoot());
         setCanceledOnTouchOutside(true);
@@ -30,12 +52,28 @@ public class QrCodeDialogUtils extends Dialog{
         binding.setUtils(this);
     }
 
-    @BindingAdapter("qrCodeUrl")
-    public static void showQrCode(ImageView imageView,String url){
-        GlideUtils.load(imageView.getContext(),url,imageView);
-    }
-
     public void onPrintClick(){
-        ToastUtils.showShortToast(context,"打印了");
+        if(IDzPrinter.PrinterState.Disconnected.equals(PrinterUtils.getInstance().getLPAPI().getPrinterState())){
+            new AlertDialog.Builder(getContext())
+                    .setTitle("提示")
+                    .setMessage("蓝牙打印机未连接，是否前去连接")
+                    .setPositiveButton("确定", new OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getContext().startActivity(new Intent(getContext(), ConfigIndexActivity.class));
+                        }
+                    }).setNegativeButton("取消", new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).show();
+        }else{
+            if(!PrinterUtils.getInstance().printQRCode(qrCodeUrl)){
+                ToastUtils.showShortToast(getContext(),"打印失败");
+            }else{
+                dismiss();
+            }
+        }
     }
 }

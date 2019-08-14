@@ -1,6 +1,7 @@
 package com.cloudcreativity.storage.base;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -56,7 +57,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseDial
         disposableDestroy = new CompositeDisposable();
     }
 
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         //取消显示的Toast
@@ -74,6 +74,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseDial
         disposableDestroy.dispose();
         disposableDestroy = null;
     }
+
 
     @Override
     public boolean addRxDestroy(Disposable disposable) {

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.widget.Toast;
 
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
@@ -24,6 +25,7 @@ public class BaseApp extends Application {
         super.onCreate();
         app = this;
         initRefreshLayout();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)

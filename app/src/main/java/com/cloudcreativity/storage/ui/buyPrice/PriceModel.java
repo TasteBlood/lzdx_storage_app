@@ -76,7 +76,7 @@ public class PriceModel extends BaseModel<BaseActivity, ActivityPriceBinding> {
                             @Override
                             public void onOk(Provider.Entity entity, float price) {
                                 //处理采价
-                                pushPrice(entity, price, item);
+                                pushPrice(entity, Float.valueOf(price*100).intValue(), item);
                             }
                         });
                         priceUtils.show();

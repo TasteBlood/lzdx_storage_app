@@ -2,7 +2,9 @@ package com.cloudcreativity.storage.ui.main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.text.TextUtils;
 
+import com.cloudcreativity.storage.base.CommonWebActivity;
 import com.cloudcreativity.storage.ui.buyPrice.BuyPriceActivity;
 import com.cloudcreativity.storage.ui.config.ConfigIndexActivity;
 import com.cloudcreativity.storage.databinding.ActivityMainBinding;
@@ -48,8 +50,13 @@ public class MainModel {
         context.startActivity(new Intent(context, RestaurantPriceActivity.class));
     }
 
-    protected void onResult(String scanCode){
-        ToastUtils.showShortToast(context,scanCode);
+    void onResult(String scanCode){
+        //ToastUtils.showShortToast(context,scanCode);
+        if(TextUtils.isEmpty(scanCode))
+            return;
+        if(scanCode.startsWith("http://")){
+            CommonWebActivity.startActivity(context,scanCode);
+        }
     }
 
 }

@@ -30,10 +30,15 @@ public class LoginModel {
         this.baseDialog = context;
         role = context.getResources().getStringArray(R.array.role);
         currentRole = role[0];
-        binding.spRole.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        binding.spRole.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                currentRole = role[i];
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                currentRole = role[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }

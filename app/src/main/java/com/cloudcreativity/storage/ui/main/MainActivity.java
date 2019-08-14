@@ -14,6 +14,10 @@ import com.cloudcreativity.storage.R;
 import com.cloudcreativity.storage.base.BaseActivity;
 import com.cloudcreativity.storage.databinding.ActivityMainBinding;
 import com.cloudcreativity.storage.receiver.MyBusinessReceiver;
+import com.cloudcreativity.storage.utils.BalanceUtils;
+import com.cloudcreativity.storage.utils.PrinterUtils;
+
+import java.io.IOException;
 
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,6 +55,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onDestroy();
         //销毁广播
         unregisterReceiver(receiver);
+
+        //关闭所有的连接
+        try {
+            BalanceUtils.getInstance().release();
+            PrinterUtils.getInstance().release();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -49,11 +49,41 @@ public class BuyOrder extends BaseResult implements Serializable{
         private String reason;
         private int state;
         private int institutionId;
+        // =2 询价结束
+        private int surveyState;
+        // =1 支付完成 可以入库
+        private int priceState;
         private int mainState;
         private String mainReason;
         private String price;
+        // =2 餐饮采价，入库时需要调用其他接口
+        private int wayState;
         private MethodDomain methodDomain;
         private List<ApprovalDomains> approvalDomains;
+
+        public int getWayState() {
+            return wayState;
+        }
+
+        public void setWayState(int wayState) {
+            this.wayState = wayState;
+        }
+
+        public int getSurveyState() {
+            return surveyState;
+        }
+
+        public void setSurveyState(int surveyState) {
+            this.surveyState = surveyState;
+        }
+
+        public int getPriceState() {
+            return priceState;
+        }
+
+        public void setPriceState(int priceState) {
+            this.priceState = priceState;
+        }
 
         public int getId() {
             return id;

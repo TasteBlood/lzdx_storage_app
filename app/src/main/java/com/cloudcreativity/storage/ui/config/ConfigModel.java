@@ -9,6 +9,8 @@ import com.cloudcreativity.storage.base.BaseDialogImpl;
 import com.cloudcreativity.storage.base.BaseModel;
 import com.cloudcreativity.storage.databinding.ActivityConfigIndexBinding;
 import com.cloudcreativity.storage.utils.BalanceUtils;
+import com.cloudcreativity.storage.utils.PrinterUtils;
+import com.dothantech.printer.IDzPrinter;
 
 public class ConfigModel extends BaseModel<BaseActivity, ActivityConfigIndexBinding>{
 
@@ -33,6 +35,11 @@ public class ConfigModel extends BaseModel<BaseActivity, ActivityConfigIndexBind
         }else{
             binding.tvBalanceStatus.setText("未连接");
         }
+        if(IDzPrinter.PrinterState.Disconnected.equals(PrinterUtils.getInstance().getLPAPI().getPrinterState())){
+            binding.tvPrinterStatus.setText("未连接");
+        }else{
+            binding.tvPrinterStatus.setText("已连接");
+        }
     }
 
     @Override
@@ -42,6 +49,7 @@ public class ConfigModel extends BaseModel<BaseActivity, ActivityConfigIndexBind
                 context.startActivity(new Intent(context,BalanceActivity.class));
                 break;
             case R.id.ll_printer:
+                context.startActivity(new Intent(context,PrinterActivity.class));
                 break;
         }
     }

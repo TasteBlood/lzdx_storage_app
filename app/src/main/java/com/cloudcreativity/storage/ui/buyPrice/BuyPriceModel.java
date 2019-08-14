@@ -18,6 +18,8 @@ import com.cloudcreativity.storage.utils.OrderDetailDialogUtils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -27,7 +29,7 @@ public class BuyPriceModel extends BaseModel<BaseActivity, ActivityBuyPriceBindi
 
 
     private int pageNum = 1;
-    private int size = 10;
+    private int size = 20;
 
     BuyPriceModel(BaseActivity context, ActivityBuyPriceBinding binding, BaseDialogImpl baseDialog) {
         super(context, binding, baseDialog);
@@ -90,51 +92,36 @@ public class BuyPriceModel extends BaseModel<BaseActivity, ActivityBuyPriceBindi
     }
 
     private void searchDetail(BuyOrder.Entity item) {
-        new OrderDetailDialogUtils(context,R.style.myProgressDialogStyle,getBaseDialog(),item.getId())
+        new OrderDetailDialogUtils(context, R.style.myProgressDialogStyle, getBaseDialog(), item.getId())
                 .show();
     }
 
     private void startPrice(BuyOrder.Entity item) {
-        Intent intent = new Intent(context,PriceActivity.class);
-        intent.putExtra("order",item);
+        Intent intent = new Intent(context, PriceActivity.class);
+        intent.putExtra("order", item);
         context.startActivity(intent);
     }
 
     private void loadData(final int page, int size) {
-        HttpUtils.getInstance().getBuyOrders(page, size)
+        HttpUtils.getInstance().getBuyOrders(page, size,1,3)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BuyOrder>(getBaseDialog()) {
                     @Override
                     public void onSuccess(BuyOrder buyOrder) {
-                        if (page == 1) {
-                            binding.refreshPrice.finishRefreshing();
-                            binding.refreshPrice.setEnableLoadmore(true);
-                            adapter.getItems().clear();
-                            if(buyOrder.getInfo().getList().size()<=0){
-                                binding.noData.setVisibility(View.VISIBLE);
-                            }else{
-                                binding.noData.setVisibility(View.GONE);
-                            }
+                        binding.refreshPrice.finishRefreshing();
+                        adapter.getItems().clear();
+                        List<BuyOrder.Entity> list = buyOrder.getInfo().getList();
+                        if (list.isEmpty()) {
+                            binding.noData.setVisibility(View.VISIBLE);
                         } else {
-                            binding.refreshPrice.finishLoadmore();
-                        }
-                        adapter.getItems().addAll(buyOrder.getInfo().getList());
-                        if(buyOrder.getInfo().isLastPage()){
-                            binding.refreshPrice.setEnableLoadmore(false);
-                        }else{
-                            binding.refreshPrice.setEnableLoadmore(true);
-                            pageNum ++;
+                            adapter.getItems().addAll(list);
                         }
                     }
 
                     @Override
                     public void onFail(ExceptionReason msg) {
-                        if (page == 1) {
-                            binding.refreshPrice.finishRefreshing();
-                        } else {
-                            binding.refreshPrice.finishLoadmore();
-                        }
+                        binding.refreshPrice.finishRefreshing();
                     }
                 });
     }
