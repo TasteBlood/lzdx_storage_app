@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.cloudcreativity.storage.base.BaseApp;
+import com.cloudcreativity.storage.entity.UserEntity;
+import com.google.gson.Gson;
 
 /**
  * 这是SharePreferences工具
@@ -63,6 +65,10 @@ public class SPUtils {
         preferences.edit().putBoolean(Config.IS_LOGIN,isLogin).apply();
     }
 
+    public UserEntity.Entity getUser(){
+        return new Gson().fromJson(preferences.getString(Config.USER,"{}"),UserEntity.Entity.class);
+    }
+
     //移除保存的数据
     public  void remove(String name){
         preferences.edit().remove(name).apply();
@@ -70,5 +76,13 @@ public class SPUtils {
 
     public boolean isLogin(){
         return preferences.getBoolean(Config.IS_LOGIN,false);
+    }
+
+    public int getRole(){
+        return preferences.getInt(Config.ROLE,0);
+    }
+
+    public void setRole(int role){
+        preferences.edit().putInt(Config.ROLE,role).apply();
     }
 }

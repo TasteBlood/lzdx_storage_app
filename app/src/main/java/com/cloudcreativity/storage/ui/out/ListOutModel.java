@@ -12,8 +12,10 @@ import com.cloudcreativity.storage.base.BaseModel;
 import com.cloudcreativity.storage.databinding.FragmentOutListBinding;
 import com.cloudcreativity.storage.databinding.ItemLayoutOutOrderBinding;
 import com.cloudcreativity.storage.entity.OutOrder;
+import com.cloudcreativity.storage.entity.UserEntity;
 import com.cloudcreativity.storage.utils.DefaultObserver;
 import com.cloudcreativity.storage.utils.HttpUtils;
+import com.cloudcreativity.storage.utils.SPUtils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
@@ -73,6 +75,7 @@ public class ListOutModel extends BaseModel<Activity, FragmentOutListBinding>{
     }
 
     private void loadData(){
+        UserEntity.Entity user = SPUtils.get().getUser();
         HttpUtils.getInstance().getOutList(2,0,0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

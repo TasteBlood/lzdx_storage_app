@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 
 import com.cloudcreativity.storage.R;
 import com.cloudcreativity.storage.ui.buyPrice.ProviderActivity;
+import com.cloudcreativity.storage.ui.loginAndRegister.LoginActivity;
 import com.cloudcreativity.storage.utils.SPUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
 
@@ -54,7 +55,7 @@ public class IndexActivity extends AppCompatActivity {
                     startActivity(new Intent().setClass(IndexActivity.this, MainActivity.class));
                 } else {
                     //跳转到登录
-                    startActivity(new Intent().setClass(IndexActivity.this, MainActivity.class));
+                    startActivity(new Intent().setClass(IndexActivity.this, LoginActivity.class));
                 }
                 onBackPressed();
             }

@@ -11,6 +11,7 @@ import com.cloudcreativity.storage.base.BaseActivity;
 import com.cloudcreativity.storage.base.BaseBindingRecyclerViewAdapter;
 import com.cloudcreativity.storage.base.BaseDialogImpl;
 import com.cloudcreativity.storage.base.BaseModel;
+import com.cloudcreativity.storage.base.BaseResult;
 import com.cloudcreativity.storage.base.CommonWebActivity;
 import com.cloudcreativity.storage.databinding.ActivityGoodsBinding;
 import com.cloudcreativity.storage.databinding.ItemLayoutGoodsBinding;
@@ -19,7 +20,9 @@ import com.cloudcreativity.storage.entity.StoreGoods;
 import com.cloudcreativity.storage.utils.CategoryWindowUtils;
 import com.cloudcreativity.storage.utils.DefaultObserver;
 import com.cloudcreativity.storage.utils.HttpUtils;
+import com.cloudcreativity.storage.utils.JudgeGoodsUtils;
 import com.cloudcreativity.storage.utils.QrCodeDialogUtils;
+import com.cloudcreativity.storage.utils.SPUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -104,7 +107,15 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
                 binding.tvCheck.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ToastUtils.showShortToast(context,"盘点了");
+                        JudgeGoodsUtils judgeGoodsUtils = new JudgeGoodsUtils(context, R.style.myProgressDialogStyle);
+                        judgeGoodsUtils.setOnOkListener(new JudgeGoodsUtils.OnOkListener() {
+                            @Override
+                            public void onOk(int state, float number, String remarks) {
+                                doJudge(state,number,remarks,item);
+                            }
+                        });
+
+                        judgeGoodsUtils.show();
                     }
                 });
             }
@@ -116,6 +127,20 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
         };
 
         binding.refreshGoods.startRefresh();
+    }
+
+    //开始盘点
+    private void doJudge(int state, float number, String remarks, StoreGoods.Entity item) {
+        HttpUtils.getInstance().doJudge(item.getPrice(),item.getId(),item.getPosition(),remarks,state,item.getUnitId(),
+                item.getProviderId(),item.getSpecsId(),number,item.getGoodsId(),item.getStoreId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<BaseResult>(context,true) {
+                    @Override
+                    public void onSuccess(BaseResult baseResult) {
+                        ToastUtils.showShortToast(context,"盘点成功");
+                    }
+                });
     }
 
     public void onCategoryClick(){
@@ -157,7 +182,7 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
     }
 
     private void loadData(final int page, int size, int oneId, int twoId, String key){
-        HttpUtils.getInstance().getStoreGoods(page,size,key)
+        HttpUtils.getInstance().getStoreGoods(page,size, SPUtils.get().getUser().getStoreId(),key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<StoreGoods>(getBaseDialog(),false) {

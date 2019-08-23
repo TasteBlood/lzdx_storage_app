@@ -16,6 +16,8 @@ import com.cloudcreativity.storage.entity.OutOrder;
 import com.cloudcreativity.storage.utils.DefaultObserver;
 import com.cloudcreativity.storage.utils.HttpUtils;
 import com.cloudcreativity.storage.utils.OutGoodsUtils;
+import com.cloudcreativity.storage.utils.SPUtils;
+import com.cloudcreativity.storage.utils.ToastUtils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
@@ -88,6 +90,10 @@ public class OutGoodsModel extends BaseModel<BaseActivity, ActivityOutGoodsBindi
                 binding.tvOut.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if(entity.getStoreAccountDomains()==null||entity.getStoreAccountDomains().isEmpty()){
+                            ToastUtils.showShortToast(context,"物品领取人为空，无法出库");
+                            return;
+                        }
                         OutGoodsUtils utils = new OutGoodsUtils(context,R.style.myProgressDialogStyle,item,entity.getStoreAccountDomains());
                         utils.setOnOkListener(new OutGoodsUtils.OnOkListener() {
                             @Override
@@ -104,7 +110,7 @@ public class OutGoodsModel extends BaseModel<BaseActivity, ActivityOutGoodsBindi
 
     private void outGoods(final OutOrder.OutGoods item, final int position,String address,int personId) {
         HttpUtils.getInstance().outRecord(item.getNumber(),
-                "赵三",
+                SPUtils.get().getUser().getPersonName(),
                 address,
                 item.getSpecsId(),
                 item.getId(),

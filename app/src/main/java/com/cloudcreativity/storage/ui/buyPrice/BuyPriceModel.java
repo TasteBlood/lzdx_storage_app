@@ -12,9 +12,11 @@ import com.cloudcreativity.storage.base.BaseModel;
 import com.cloudcreativity.storage.databinding.ActivityBuyPriceBinding;
 import com.cloudcreativity.storage.databinding.ItemLayoutBuyOrderBinding;
 import com.cloudcreativity.storage.entity.BuyOrder;
+import com.cloudcreativity.storage.entity.UserEntity;
 import com.cloudcreativity.storage.utils.DefaultObserver;
 import com.cloudcreativity.storage.utils.HttpUtils;
 import com.cloudcreativity.storage.utils.OrderDetailDialogUtils;
+import com.cloudcreativity.storage.utils.SPUtils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
@@ -103,7 +105,11 @@ public class BuyPriceModel extends BaseModel<BaseActivity, ActivityBuyPriceBindi
     }
 
     private void loadData(final int page, int size) {
-        HttpUtils.getInstance().getBuyOrders(page, size,1,3)
+        UserEntity.Entity user = SPUtils.get().getUser();
+        int institutionId = 0;
+        if(user!=null)
+            institutionId = user.getId();
+        HttpUtils.getInstance().getBuyOrders(page, size,1,3,institutionId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BuyOrder>(getBaseDialog()) {

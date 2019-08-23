@@ -1,5 +1,6 @@
 package com.cloudcreativity.storage.ui.loginAndRegister;
 
+import android.content.Intent;
 import android.databinding.ObservableField;
 import android.text.TextUtils;
 import android.view.View;
@@ -9,9 +10,14 @@ import com.cloudcreativity.storage.R;
 import com.cloudcreativity.storage.base.BaseDialogImpl;
 import com.cloudcreativity.storage.base.BaseResult;
 import com.cloudcreativity.storage.databinding.ActivityLoginBinding;
+import com.cloudcreativity.storage.entity.UserEntity;
+import com.cloudcreativity.storage.ui.main.MainActivity;
+import com.cloudcreativity.storage.utils.AppConfig;
 import com.cloudcreativity.storage.utils.DefaultObserver;
 import com.cloudcreativity.storage.utils.HttpUtils;
+import com.cloudcreativity.storage.utils.SPUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
+import com.google.gson.Gson;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -62,21 +68,34 @@ public class LoginModel {
             case "餐饮采价员":
                 restaurantLogin(phone.get(),pwd.get());
                 break;
-            case "采购采价员":
+            case "采购询价员":
                 priceLogin(phone.get(),pwd.get());
                 break;
         }
     }
 
-    //采价员登录
+    //询价员登录
     private void priceLogin(String phone, String pwd) {
         HttpUtils.getInstance().priceLogin(phone,pwd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DefaultObserver<BaseResult>(baseDialog,true) {
+                .subscribe(new DefaultObserver<UserEntity>(baseDialog,true) {
                     @Override
-                    public void onSuccess(BaseResult baseResult) {
-
+                    public void onSuccess(UserEntity baseResult) {
+                        UserEntity.Entity info = baseResult.getInfo();
+                        if(info!=null&&baseResult.getInfo().getState()==2){
+                            //是
+                            SPUtils.get().setLogin(true);
+                            SPUtils.get().putString(SPUtils.Config.TOKEN,baseResult.getInfo().getToken());
+                            SPUtils.get().setUID(baseResult.getInfo().getId());
+                            SPUtils.get().putString(SPUtils.Config.USER,new Gson().toJson(baseResult.getInfo()));
+                            SPUtils.get().setRole(AppConfig.USER_ROLE.PRICE);
+                            context.startActivity(new Intent(context, MainActivity.class));
+                            context.finish();
+                        }else{
+                            //不是库管
+                            ToastUtils.showShortToast(context,"该询价员不存在");
+                        }
                     }
 
                     @Override
@@ -88,13 +107,26 @@ public class LoginModel {
 
     //餐饮采价员登录
     private void restaurantLogin(String phone, String pwd) {
-        HttpUtils.getInstance().restaurantLogin(phone,pwd)
+        HttpUtils.getInstance().priceLogin(phone,pwd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DefaultObserver<BaseResult>(baseDialog,true) {
+                .subscribe(new DefaultObserver<UserEntity>(baseDialog,true) {
                     @Override
-                    public void onSuccess(BaseResult baseResult) {
-
+                    public void onSuccess(UserEntity baseResult) {
+                        UserEntity.Entity info = baseResult.getInfo();
+                        if(info!=null&&baseResult.getInfo().getState()==0){
+                            //是库管
+                            SPUtils.get().setLogin(true);
+                            SPUtils.get().putString(SPUtils.Config.TOKEN,baseResult.getInfo().getToken());
+                            SPUtils.get().setUID(baseResult.getInfo().getId());
+                            SPUtils.get().putString(SPUtils.Config.USER,new Gson().toJson(baseResult.getInfo()));
+                            SPUtils.get().setRole(AppConfig.USER_ROLE.RESTAURANT);
+                            context.startActivity(new Intent(context, MainActivity.class));
+                            context.finish();
+                        }else{
+                            //不是库管
+                            ToastUtils.showShortToast(context,"该采价员不存在");
+                        }
                     }
 
                     @Override
@@ -109,10 +141,23 @@ public class LoginModel {
         HttpUtils.getInstance().adminLogin(phone,pwd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DefaultObserver<BaseResult>(baseDialog,true) {
+                .subscribe(new DefaultObserver<UserEntity>(baseDialog,true) {
                     @Override
-                    public void onSuccess(BaseResult baseResult) {
-
+                    public void onSuccess(UserEntity baseResult) {
+                        UserEntity.Entity info = baseResult.getInfo();
+                        if(info!=null&&baseResult.getInfo().getState()==1&&baseResult.getInfo().getStoreId()!=0){
+                            //是库管
+                            SPUtils.get().setLogin(true);
+                            SPUtils.get().putString(SPUtils.Config.TOKEN,baseResult.getInfo().getToken());
+                            SPUtils.get().setUID(baseResult.getInfo().getId());
+                            SPUtils.get().putString(SPUtils.Config.USER,new Gson().toJson(baseResult.getInfo()));
+                            SPUtils.get().setRole(AppConfig.USER_ROLE.MANAGER);
+                            context.startActivity(new Intent(context, MainActivity.class));
+                            context.finish();
+                        }else{
+                            //不是库管
+                            ToastUtils.showShortToast(context,"该库管不存在");
+                        }
                     }
 
                     @Override

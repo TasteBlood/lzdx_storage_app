@@ -12,8 +12,10 @@ import com.cloudcreativity.storage.base.BaseModel;
 import com.cloudcreativity.storage.databinding.FragmentRequestListBinding;
 import com.cloudcreativity.storage.databinding.ItemLayoutBuyOrderEnterBinding;
 import com.cloudcreativity.storage.entity.BuyOrder;
+import com.cloudcreativity.storage.entity.UserEntity;
 import com.cloudcreativity.storage.utils.DefaultObserver;
 import com.cloudcreativity.storage.utils.HttpUtils;
+import com.cloudcreativity.storage.utils.SPUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
@@ -28,7 +30,7 @@ public class RequestListModel extends BaseModel<Activity, FragmentRequestListBin
 
     private int pageNum = 1;
 
-    private int size =20;
+    private int size = 20;
 
     public BaseBindingRecyclerViewAdapter<BuyOrder.Entity, ItemLayoutBuyOrderEnterBinding> adapter;
 
@@ -42,7 +44,7 @@ public class RequestListModel extends BaseModel<Activity, FragmentRequestListBin
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
                 pageNum = 1;
-                loadData(pageNum,size);
+                loadData(pageNum, size);
             }
 
             @Override
@@ -51,7 +53,7 @@ public class RequestListModel extends BaseModel<Activity, FragmentRequestListBin
             }
         });
 
-        binding.rcvRequestList.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
+        binding.rcvRequestList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
     }
 
     @Override
@@ -68,8 +70,8 @@ public class RequestListModel extends BaseModel<Activity, FragmentRequestListBin
                 binding.getRoot().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context,EnterGoodsListActivity.class);
-                        intent.putExtra("order",item);
+                        Intent intent = new Intent(context, EnterGoodsListActivity.class);
+                        intent.putExtra("order", item);
                         context.startActivity(intent);
                     }
                 });
@@ -80,8 +82,12 @@ public class RequestListModel extends BaseModel<Activity, FragmentRequestListBin
 
     }
 
-    private void loadData(int page, int size){
-        HttpUtils.getInstance().getBoughtOrders(page, size,3,1,2)
+    private void loadData(int page, int size) {
+        UserEntity.Entity user = SPUtils.get().getUser();
+        int institutionId = 0;
+        if (user != null)
+            institutionId = user.getInstitutionId();
+        HttpUtils.getInstance().getBoughtOrders(page, size, 3, 1, 2, institutionId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BuyOrder>(getBaseDialog()) {
@@ -89,9 +95,9 @@ public class RequestListModel extends BaseModel<Activity, FragmentRequestListBin
                     public void onSuccess(BuyOrder buyOrder) {
                         binding.refreshRequestList.finishRefreshing();
                         adapter.getItems().clear();
-                        if(buyOrder.getInfo().getList().isEmpty()){
+                        if (buyOrder.getInfo().getList().isEmpty()) {
                             binding.noData.setVisibility(View.VISIBLE);
-                        }else{
+                        } else {
                             binding.noData.setVisibility(View.GONE);
                             adapter.getItems().addAll(buyOrder.getInfo().getList());
                         }

@@ -33,8 +33,10 @@ public class MyBusinessReceiver extends BroadcastReceiver {
             //首先清空所有的用户数据
             SPUtils spUtils = SPUtils.get();
             spUtils.putBoolean(SPUtils.Config.IS_LOGIN,false);
-            spUtils.putInt(SPUtils.Config.UID,0);
+            spUtils.putString(SPUtils.Config.USER,"{}");
+            spUtils.setUID(0);
             spUtils.putString(SPUtils.Config.TOKEN,null);
+            spUtils.setRole(0);
 
             //这一步是关闭程序
             BaseApp.app.destroyActivity();
@@ -51,8 +53,10 @@ public class MyBusinessReceiver extends BroadcastReceiver {
             //首先清空所有的用户数据
             SPUtils spUtils = SPUtils.get();
             spUtils.putBoolean(SPUtils.Config.IS_LOGIN,false);
-            spUtils.putInt(SPUtils.Config.UID,0);
+            spUtils.putString(SPUtils.Config.USER,"{}");
+            spUtils.setUID(0);
             spUtils.putString(SPUtils.Config.TOKEN,null);
+            spUtils.setRole(0);
             BaseApp.app.destroyActivity();
             Intent newIntent = new Intent(context, LoginActivity.class);
             newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

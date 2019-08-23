@@ -2,7 +2,7 @@
 <resources>
     <string-array name="role">
         <item>餐饮采价员</item>
-        <item>采购采价员</item>
+        <item>采购询价员</item>
         <item>仓库管理员</item>
     </string-array>
 </resources>

@@ -16,6 +16,7 @@ import com.cloudcreativity.storage.entity.EnterGoods;
 import com.cloudcreativity.storage.utils.DefaultObserver;
 import com.cloudcreativity.storage.utils.EnterGoodsUtils;
 import com.cloudcreativity.storage.utils.HttpUtils;
+import com.cloudcreativity.storage.utils.SPUtils;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
@@ -107,7 +108,7 @@ public class EnterGoodsModel extends BaseModel<BaseActivity, ActivityEnterGoodsB
                 item.getId(),
                 item.getGoodsId(),
                 item.getProviderId(),
-                12,
+                SPUtils.get().getUser().getStoreId(),
                 item.getSpecsId(),
                 item.getUnitId(),
                 item.getPrice(),

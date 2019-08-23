@@ -13,6 +13,7 @@ import com.cloudcreativity.storage.entity.OutRecord;
 import com.cloudcreativity.storage.entity.PriceGoods;
 import com.cloudcreativity.storage.entity.Provider;
 import com.cloudcreativity.storage.entity.StoreGoods;
+import com.cloudcreativity.storage.entity.UserEntity;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -31,7 +32,7 @@ public interface APIService {
     /**
      * 整体的接口配置
      */
-    String TEST_HOST = "http://192.168.31.160:8080/";
+    String TEST_HOST = "http://store-service-landa.lz-cc.com/";
     String ONLINE_HOST = "http://store-service-landa.lz-cc.com/";
     String HOST_APP = AppConfig.DEBUG ? TEST_HOST : ONLINE_HOST;
 
@@ -45,7 +46,8 @@ public interface APIService {
     Observable<BuyOrder> getBuyOrders(@Field("page") int page,
                                       @Field("size") int size,
                                       @Field("surveyState") int surveyState,
-                                      @Field("state") int state);
+                                      @Field("state") int state,
+                                      @Field("institutionId") int institutionId);
 
     //查询入库单
     @POST("/order/selectOrder")
@@ -54,7 +56,8 @@ public interface APIService {
                                          @Field("size") int size,
                                          @Field("state") int state,
                                          @Field("mainState") int mainState,
-                                         @Field("surveyState") int surveyState);
+                                         @Field("surveyState") int surveyState,
+                                         @Field("institutionId") int institutionId);
 
     //查询采购单商品
     @POST("/needgoods/searchGoods")
@@ -79,7 +82,7 @@ public interface APIService {
     * created: 2019/8/2 16:22
     * desc:添加入库
     */
-    @POST("/enter/addRecord")
+    @POST("/app/enter/addRecord")
     @FormUrlEncoded
     Observable<BaseResult> enterStore(@Field("orderId") int orderId,
                                       @Field("needGoodsId") int needGoodsId,
@@ -101,7 +104,7 @@ public interface APIService {
                                       @Field("size") int size);
 
     //添加普通采购采价记录
-    @POST("/surveyGoods/addSurvey")
+    @POST("/app/surveyGoods/addSurvey")
     @FormUrlEncoded
     Observable<BaseResult> addBuyPriceRecord(@Field("needGoodsId") int gid,
                                              @Field("providerId") int providerId,
@@ -117,23 +120,17 @@ public interface APIService {
     // 采价员登录
     @POST("/surveyAccount/accountLogin")
     @FormUrlEncoded
-    Observable<BaseResult> priceLogin(@Field("accountName") String account,
+    Observable<UserEntity> priceLogin(@Field("accountName") String account,
                                       @Field("accountPwd") String pwd);
-
-    // 餐饮采价员登录
-    @POST("/surveyAccount/accountLogin")
-    @FormUrlEncoded
-    Observable<BaseResult> restaurantLogin(@Field("accountName") String account,
-                                           @Field("accountPwd") String pwd);
 
     // 库管登录
     @POST("/surveyAccount/accountLogin")
     @FormUrlEncoded
-    Observable<BaseResult> adminLogin(@Field("accountName") String account,
+    Observable<UserEntity> adminLogin(@Field("accountName") String account,
                                       @Field("accountPwd") String pwd);
 
     //添加供应商
-    @POST("/provider/add")
+    @POST("/app/provider/add")
     @FormUrlEncoded
     Observable<BaseResult> addProvider(@Field("shopName") String shopName,
                                        @Field("realName") String realName,
@@ -145,6 +142,7 @@ public interface APIService {
     @FormUrlEncoded
     Observable<StoreGoods> getStoreGoods(@Field("page") int page,
                                          @Field("size") int size,
+                                         @Field("storeId") int storeId,
                                          @Field("goodsName") String key);
 
     //入库记录
@@ -174,7 +172,7 @@ public interface APIService {
     Observable<OutGoods> getOutListGoods(@Field("applyId") int applyId);
 
     //出库
-    @POST("/out/add")
+    @POST("/app/out/add")
     @FormUrlEncoded
     Observable<BaseResult> outRecord(@Field("number") int number,
                                      @Field("person") String person,
@@ -194,7 +192,7 @@ public interface APIService {
     * desc:
      * @param state ==2 餐饮商品
     */
-    @POST("/goodsCategory/selectGoods")
+    @POST("/goodsCategory/selectGoodsInfo")
     @FormUrlEncoded
     Observable<Goods> getFullGoods(@Field("categoryOneId") int categoryOneId,
                                    @Field("categoryTwoId") int categoryTwoId,
@@ -204,7 +202,7 @@ public interface APIService {
                                    @Field("state") int state);
 
     //餐饮采价
-    @POST("/surveyInfo/addSurveyInfo")
+    @POST("/app/surveyInfo/addSurveyInfo")
     @FormUrlEncoded
     Observable<BaseResult> addRestaurantPrice(@Field("goodsId") int goodsId,
                                               @Field("specsId") int specsId,
@@ -217,5 +215,27 @@ public interface APIService {
     @POST("/needgoods/searchAllGoods")
     @FormUrlEncoded
     Observable<EnterGoods> getRestaurantGoods(@Field("orderId") int orderId);
+
+    /**
+    * @author : xuxiwu
+    * created: 2019/8/2 16:22
+     * *@param state 1 盘亏 2 盘盈
+     * @param  articleId 物品记录id
+     * @param goodsId 物品id
+    * desc:
+    */
+    @POST("/app/inventory/addGoodsLoos")
+    @FormUrlEncoded
+    Observable<BaseResult> doJudge(@Field("price") int price,
+                                    @Field("articleId") int articleId,
+                                    @Field("position") String position,
+                                    @Field("IRemarks") String remarks,
+                                    @Field("state") int state,
+                                    @Field("unitId") int unitId,
+                                    @Field("providerId") int providerId,
+                                    @Field("specsId") int specsId,
+                                    @Field("number") float number,
+                                    @Field("goodsId") int goodsId,
+                                    @Field("storeId") int storeId);
 
 }

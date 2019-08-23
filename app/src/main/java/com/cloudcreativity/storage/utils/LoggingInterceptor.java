@@ -1,10 +1,14 @@
 package com.cloudcreativity.storage.utils;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
+import com.cloudcreativity.storage.entity.UserEntity;
 
 import java.io.IOException;
 
 import okhttp3.FormBody;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -31,21 +35,13 @@ public class LoggingInterceptor implements Interceptor {
                     builder.addEncoded(body.encodedName(i), body.encodedValue(i));
                 }
                 //添加公共参数
-//                UserEntity user = SPUtils.get().getUser();
-//                if(user!=null){
-//                    builder.addEncoded("token",SPUtils.get().getToken())
-//                            .addEncoded("userId",String.valueOf(SPUtils.get().getUid()));
-//                    sb.append("token" + "=" + SPUtils.get().getToken() + ",");
-//                    sb.append("userId" + "=" + SPUtils.get().getUid() + ",");
-//                    //如果不是编辑资料的话，就添加areaId和cityId
-//                    if(!request.url().toString().endsWith("updateUser.do")){
-//                        builder.add("cityId",user.getCityId())
-//                                .add("areaId",user.getAreaId());
-//                        sb.append("cityId" + "=" +user.getCityId()+ ",");
-//                        sb.append("areaId" + "=" +user.getAreaId()+",");
-//                    }
-//                    body = builder.build();
-//                }
+                UserEntity.Entity user = SPUtils.get().getUser();
+                if(user!=null&& !TextUtils.isEmpty(user.getToken())){
+                    builder.addEncoded("token",user.getToken())
+                            .addEncoded("uid",String.valueOf(user.getId()));
+                    sb.append("token" + "=" + user.getToken() + ",");
+                    sb.append("uid" + "=" +user.getId() + ",");
+                }
                 body = builder.build();
                 sb.delete(sb.length() - 1, sb.length());
                 LogUtils.e(TAG, "| RequestParams:{"+sb.toString()+"}");
@@ -53,15 +49,16 @@ public class LoggingInterceptor implements Interceptor {
             }
         }else if("GET".equals(method)){
             //LogUtils.e("xuxiwu_debug_test",SPUtils.get().getUser().toString());
-//            if(SPUtils.get().getUser()!=null) {
-//                HttpUrl httpUrl = request.url().newBuilder()
-//                        .addQueryParameter("token", SPUtils.get().getToken())
-//                        .addQueryParameter("userId", String.valueOf(SPUtils.get().getUid()))
-////                        .addQueryParameter("cityId", String.valueOf(SPUtils.get().getUser().getCityId()))
-////                        .addQueryParameter("areaId", SPUtils.get().getUser().getAreaId())
-//                        .build();
-//                request = request.newBuilder().url(httpUrl).build();
-//            }
+            UserEntity.Entity user = SPUtils.get().getUser();
+            if(user!=null&& !TextUtils.isEmpty(user.getToken())) {
+                HttpUrl httpUrl = request.url().newBuilder()
+                        .addQueryParameter("token", user.getToken())
+                        .addQueryParameter("uid", String.valueOf(user.getId()))
+//                        .addQueryParameter("cityId", String.valueOf(SPUtils.get().getUser().getCityId()))
+//                        .addQueryParameter("areaId", SPUtils.get().getUser().getAreaId())
+                        .build();
+                request = request.newBuilder().url(httpUrl).build();
+            }
         }
         LogUtils.e(TAG,"\n");
         LogUtils.e(TAG,"----------Start----------------");

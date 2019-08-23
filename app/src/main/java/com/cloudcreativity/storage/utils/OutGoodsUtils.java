@@ -65,7 +65,7 @@ public class OutGoodsUtils extends Dialog implements DialogInterface.OnDismissLi
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         assert getWindow()!=null;
         getWindow().getAttributes().width = metrics.widthPixels-40;
-        if(!accounts.isEmpty()){
+        if(accounts!=null&&!accounts.isEmpty()){
             String[] titles = new String[accounts.size()];
             for(int i=0;i<accounts.size();i++){
                 titles[i] = accounts.get(i).getAccountName();
@@ -83,6 +83,8 @@ public class OutGoodsUtils extends Dialog implements DialogInterface.OnDismissLi
 
                 }
             });
+        }else{
+            ToastUtils.showShortToast(context,"物品领用人为空，无法领取");
         }
 
     }

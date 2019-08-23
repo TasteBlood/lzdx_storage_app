@@ -40,7 +40,8 @@ public class ConfigIndexActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        model.initData();
+        if(model!=null)
+            model.initData();
     }
 
     @Override

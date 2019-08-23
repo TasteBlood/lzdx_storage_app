@@ -65,8 +65,18 @@ public abstract class DefaultObserver<T extends BaseResult> implements Observer<
         }else{
             if(t.getStatus()==1){
                 onSuccess(t);
+            }else if(t.getStatus()==500){
+                //清空用户信息
+                SPUtils spUtils = SPUtils.get();
+                spUtils.putBoolean(SPUtils.Config.IS_LOGIN,false);
+                spUtils.putString(SPUtils.Config.USER,"{}");
+                spUtils.setUID(0);
+                spUtils.putString(SPUtils.Config.TOKEN,null);
+                spUtils.setRole(0);
+                impl.showUserAuthOutDialog();
             }else{
                 impl.showRequestErrorMessage("系统异常");
+                onFail(ExceptionReason.PARAMS_ERROR);
             }
         }
     }

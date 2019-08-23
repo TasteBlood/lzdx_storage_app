@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="utils"
+            type="com.cloudcreativity.storage.utils.JudgeGoodsUtils" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dip"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <RadioGroup
+            android:id="@+id/rg_judge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/rb_loss"
+                android:text="盘亏"
+                android:checked="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <RadioButton
+                android:id="@+id/rb_win"
+                android:text="盘盈"
+                android:layout_marginStart="20dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RadioGroup>
+        <EditText
+            android:hint="数量"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/input_line"
+            android:padding="10dip"
+            android:inputType="numberDecimal"
+            android:layout_width="150dip"
+            android:text="@={utils.number}"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:hint="备注"
+            android:layout_marginTop="10dip"
+            android:background="@drawable/input_line"
+            android:padding="5dip"
+            android:inputType="text"
+            android:text="@={utils.remarks}"
+            android:layout_width="match_parent"
+            android:gravity="start"
+            android:layout_height="wrap_content" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Button"
+            android:layout_marginTop="20dip"
+            android:onClick="@{()->utils.onOk()}"
+            android:text="保存"/>
+    </LinearLayout>
+</layout>
