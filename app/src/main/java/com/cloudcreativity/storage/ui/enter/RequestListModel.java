@@ -84,10 +84,7 @@ public class RequestListModel extends BaseModel<Activity, FragmentRequestListBin
 
     private void loadData(int page, int size) {
         UserEntity.Entity user = SPUtils.get().getUser();
-        int institutionId = 0;
-        if (user != null)
-            institutionId = user.getInstitutionId();
-        HttpUtils.getInstance().getBoughtOrders(page, size, 3, 1, 2, institutionId)
+        HttpUtils.getInstance().getBoughtOrders(page, size, 3, 1, 2, user.getStoreId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BuyOrder>(getBaseDialog()) {

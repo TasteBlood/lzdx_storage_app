@@ -76,7 +76,7 @@ public class ListOutModel extends BaseModel<Activity, FragmentOutListBinding>{
 
     private void loadData(){
         UserEntity.Entity user = SPUtils.get().getUser();
-        HttpUtils.getInstance().getOutList(2,0,0)
+        HttpUtils.getInstance().getOutList(2,user.getAccountId(),user.getStoreId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<OutOrder>(getBaseDialog(),false) {

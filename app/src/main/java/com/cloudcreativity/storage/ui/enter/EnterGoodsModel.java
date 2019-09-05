@@ -94,16 +94,17 @@ public class EnterGoodsModel extends BaseModel<BaseActivity, ActivityEnterGoodsB
         EnterGoodsUtils utils = new EnterGoodsUtils(context,R.style.myProgressDialogStyle,item);
         utils.setOnOkListener(new EnterGoodsUtils.OnOkListener() {
             @Override
-            public void onOk(int number, String address, String position) {
-                submit(item,itemPos,address,number,position);
+            public void onOk(int number, String address, String position,int newPrice) {
+                submit(item,itemPos,address,number,position,newPrice);
             }
         });
 
         utils.show();
     }
 
-    private void submit(final EnterGoods.Entity item, final int itemPos, final String address, int number, String position){
+    private void submit(final EnterGoods.Entity item, final int itemPos, final String address, int number, String position,int newPrice){
         HttpUtils.getInstance().enterStore(
+                entity.getInstitutionId(),
                 entity.getId(),
                 item.getId(),
                 item.getGoodsId(),
@@ -115,6 +116,7 @@ public class EnterGoodsModel extends BaseModel<BaseActivity, ActivityEnterGoodsB
                 number,
                 position,
                 address,
+                newPrice,
                 entity.getWayState())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

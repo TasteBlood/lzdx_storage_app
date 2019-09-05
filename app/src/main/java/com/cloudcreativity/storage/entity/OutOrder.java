@@ -209,6 +209,15 @@ public class OutOrder extends BaseResult {
         private String specsName;
         private String unitName;
         private int articleId;
+        private int price;
+
+        public int getPrice() {
+            return price;
+        }
+
+        public void setPrice(int price) {
+            this.price = price;
+        }
 
         public int getArticleId() {
             return articleId;

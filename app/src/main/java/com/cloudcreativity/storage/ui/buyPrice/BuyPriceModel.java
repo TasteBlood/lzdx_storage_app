@@ -106,10 +106,7 @@ public class BuyPriceModel extends BaseModel<BaseActivity, ActivityBuyPriceBindi
 
     private void loadData(final int page, int size) {
         UserEntity.Entity user = SPUtils.get().getUser();
-        int institutionId = 0;
-        if(user!=null)
-            institutionId = user.getId();
-        HttpUtils.getInstance().getBuyOrders(page, size,1,3,institutionId)
+        HttpUtils.getInstance().getBuyOrders(page, size,1,3,user.getStoreId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BuyOrder>(getBaseDialog()) {

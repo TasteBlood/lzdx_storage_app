@@ -118,7 +118,8 @@ public class OutGoodsModel extends BaseModel<BaseActivity, ActivityOutGoodsBindi
                 entity.getStoreId(),
                 personId,
                 item.getArticleId(),
-                entity.getId())
+                entity.getId(),
+                item.getPrice())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BaseResult>(getBaseDialog(),true) {

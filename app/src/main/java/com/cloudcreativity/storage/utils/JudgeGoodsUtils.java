@@ -44,6 +44,7 @@ public class JudgeGoodsUtils extends Dialog {
         assert getWindow()!= null;
         getWindow().getAttributes().width = context.getResources().getDisplayMetrics().widthPixels - 40;
         binding.setUtils(this);
+        setCanceledOnTouchOutside(true);
         binding.rgJudge.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

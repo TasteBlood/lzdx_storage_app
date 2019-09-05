@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
     public ObservableField<EnterGoods.Entity> entity = new ObservableField<>();
     public ObservableField<String> position = new ObservableField<>();
     public ObservableField<String> weight = new ObservableField<>();
+    public ObservableField<String> newPrice = new ObservableField<>();
 
     private OnOkListener onOkListener;
     private String address;
@@ -78,7 +80,8 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
     public void onOk(){
         dismiss();
         if(onOkListener!=null){
-            onOkListener.onOk(Integer.parseInt(weight.get()),address,position.get());
+            float price = TextUtils.isEmpty(newPrice.get())?0:Float.parseFloat(newPrice.get());
+            onOkListener.onOk(Integer.parseInt(weight.get()),address,position.get(),Float.valueOf(price*100).intValue());
         }
     }
 
@@ -89,7 +92,7 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
     }
 
     public interface OnOkListener{
-        void onOk(int number,String address,String position);
+        void onOk(int number,String address,String position,int newPrice);
     }
 
 }

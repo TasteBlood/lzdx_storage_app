@@ -6,15 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 
 import com.cloudcreativity.storage.R;
-import com.cloudcreativity.storage.base.BaseApp;
 import com.cloudcreativity.storage.databinding.LayoutQrCodeBinding;
+import com.cloudcreativity.storage.entity.StoreGoods;
 import com.cloudcreativity.storage.ui.config.ConfigIndexActivity;
 import com.dothantech.printer.IDzPrinter;
 
@@ -22,16 +21,16 @@ public class QrCodeDialogUtils extends Dialog{
 
     private LayoutQrCodeBinding binding;
     private Context context;
-    private String qrCodeUrl;
-    public QrCodeDialogUtils(@NonNull final Context context, int themeResId, final String url) {
+    private StoreGoods.Entity item;
+    public QrCodeDialogUtils(@NonNull final Context context, int themeResId, final StoreGoods.Entity item) {
         super(context, themeResId);
         this.context = context;
-        this.qrCodeUrl = url;
+        this.item = item;
         binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.layout_qr_code,null,false);
         new Thread(){
             @Override
             public void run() {
-                final Bitmap qrImage = QRCodeUtils.createQRImage(url, 400, 400);
+                final Bitmap qrImage = QRCodeUtils.createQRImage(item.getBarCode(), 400, 400);
                 new Handler(context.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -69,7 +68,8 @@ public class QrCodeDialogUtils extends Dialog{
                 }
             }).show();
         }else{
-            if(!PrinterUtils.getInstance().printQRCode(qrCodeUrl)){
+            if(PrinterUtils.getInstance().printDocument(item.getGoodsName(),item.getProviderName(),StrUtils.get2BitDecimal(item.getPrice()/100f),
+            item.getBarCode())){
                 ToastUtils.showShortToast(getContext(),"打印失败");
             }else{
                 dismiss();

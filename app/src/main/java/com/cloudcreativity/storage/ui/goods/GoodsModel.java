@@ -98,9 +98,13 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
                 binding.tvQrCode.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if(TextUtils.isEmpty(item.getBarCode())){
+                            ToastUtils.showShortToast(context,"暂无二维码信息");
+                            return;
+                        }
                         new QrCodeDialogUtils(context,
                                 R.style.myProgressDialogStyle,
-                                item.getBarCode()).show();
+                                item).show();
                     }
                 });
 
@@ -131,7 +135,8 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
 
     //开始盘点
     private void doJudge(int state, float number, String remarks, StoreGoods.Entity item) {
-        HttpUtils.getInstance().doJudge(item.getPrice(),item.getId(),item.getPosition(),remarks,state,item.getUnitId(),
+        int accountId = SPUtils.get().getUser().getAccountId();
+        HttpUtils.getInstance().doJudge(accountId,item.getPrice(),item.getId(),item.getPosition(),remarks,state,item.getUnitId(),
                 item.getProviderId(),item.getSpecsId(),number,item.getGoodsId(),item.getStoreId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

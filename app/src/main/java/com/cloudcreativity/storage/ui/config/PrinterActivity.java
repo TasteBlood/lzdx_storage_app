@@ -57,7 +57,7 @@ public class PrinterActivity extends BaseActivity {
             public void onClick(View v) {
                 //打印测试页
                 if(!IDzPrinter.PrinterState.Disconnected.equals(PrinterUtils.getInstance().getLPAPI().getPrinterState())){
-                    if(!PrinterUtils.getInstance().printQRCode("http://www.baidu.com")){
+                    if(PrinterUtils.getInstance().printDocument("测试商品","兰大后勤科技",20000f,"http://www.baidu.com")){
                         showRequestErrorMessage("打印失败");
                     }
                 }else{

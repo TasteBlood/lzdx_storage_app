@@ -47,7 +47,7 @@ public interface APIService {
                                       @Field("size") int size,
                                       @Field("surveyState") int surveyState,
                                       @Field("state") int state,
-                                      @Field("institutionId") int institutionId);
+                                      @Field("storeId") int storeId);
 
     //查询入库单
     @POST("/order/selectOrder")
@@ -57,7 +57,7 @@ public interface APIService {
                                          @Field("state") int state,
                                          @Field("mainState") int mainState,
                                          @Field("surveyState") int surveyState,
-                                         @Field("institutionId") int institutionId);
+                                         @Field("storeId") int storeId);
 
     //查询采购单商品
     @POST("/needgoods/searchGoods")
@@ -84,7 +84,8 @@ public interface APIService {
     */
     @POST("/app/enter/addRecord")
     @FormUrlEncoded
-    Observable<BaseResult> enterStore(@Field("orderId") int orderId,
+    Observable<BaseResult> enterStore(@Field("institutionId") int institutionId,
+                                      @Field("orderId") int orderId,
                                       @Field("needGoodsId") int needGoodsId,
                                       @Field("goodsId") int goodsId,
                                       @Field("providerId") int providerId,
@@ -95,6 +96,7 @@ public interface APIService {
                                       @Field("number") int number,
                                       @Field("position") String position,
                                       @Field("address") String address,
+                                      @Field("newPrice") Integer newPrice,
                                       @Field("wayState") int wayState);
 
     //查询全部的供应商
@@ -183,7 +185,8 @@ public interface APIService {
                                      @Field("storeId") int storeId,
                                      @Field("accountId") int accountId,
                                      @Field("articleId") int articleId,
-                                     @Field("applyId") int applyId);
+                                     @Field("applyId") int applyId,
+                                     @Field("price") int price);
 
     //查询原始商品
     /**
@@ -226,10 +229,11 @@ public interface APIService {
     */
     @POST("/app/inventory/addGoodsLoos")
     @FormUrlEncoded
-    Observable<BaseResult> doJudge(@Field("price") int price,
+    Observable<BaseResult> doJudge(@Field("accountId") int accountId,
+                                   @Field("price") int price,
                                     @Field("articleId") int articleId,
                                     @Field("position") String position,
-                                    @Field("IRemarks") String remarks,
+                                    @Field("lRemarks") String remarks,
                                     @Field("state") int state,
                                     @Field("unitId") int unitId,
                                     @Field("providerId") int providerId,
