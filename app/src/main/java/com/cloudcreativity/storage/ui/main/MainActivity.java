@@ -3,12 +3,11 @@ package com.cloudcreativity.storage.ui.main;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.cloudcreativity.storage.R;
 import com.cloudcreativity.storage.base.BaseActivity;
@@ -17,11 +16,13 @@ import com.cloudcreativity.storage.receiver.MyBusinessReceiver;
 import com.cloudcreativity.storage.utils.BalanceUtils;
 import com.cloudcreativity.storage.utils.PrinterUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
+import com.cloudcreativity.storage.utils.UpdateManager;
+import com.jaeger.library.StatusBarUtil;
 
 import java.io.IOException;
 
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity{
 
     private ActivityMainBinding binding;
     private MyBusinessReceiver receiver;
@@ -30,7 +31,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
         //注册广播
         receiver = new MyBusinessReceiver();
         IntentFilter filter = new IntentFilter();
@@ -42,13 +47,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mainModal = new MainModel(this, binding,this);
         binding.setMainModal(mainModal);
-        binding.nvMain.setNavigationItemSelectedListener(this);
-        binding.ibClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.dwlMain.openDrawer(Gravity.START,true);
-            }
-        });
+
+        //StatusBarUtil.setTranslucent(this,200);
     }
 
     @Override
@@ -67,13 +67,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        binding.dwlMain.closeDrawer(Gravity.START,true);
-        if (item.getItemId() == R.id.nav_settings) {
-            startActivity(new Intent().setClass(this, SettingActivity.class));
-            return true;
-        }
-        return false;
+    protected void onResume() {
+        super.onResume();
+
+        UpdateManager.checkVersion(this,this);
     }
 
     @Override

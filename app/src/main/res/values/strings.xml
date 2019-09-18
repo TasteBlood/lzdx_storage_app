@@ -165,5 +165,6 @@
     <string name="viewfinderview_status_text1">将二维码/条码放入取景框内</string>
     <string name="viewfinderview_status_text2">即可自动扫描</string>
     <string name="str_no_data">暂无数据</string>
+    <string name="str_system_help">用户使用帮助</string>
 
 </resources>

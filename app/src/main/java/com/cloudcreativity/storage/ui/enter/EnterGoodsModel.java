@@ -94,7 +94,7 @@ public class EnterGoodsModel extends BaseModel<BaseActivity, ActivityEnterGoodsB
         EnterGoodsUtils utils = new EnterGoodsUtils(context,R.style.myProgressDialogStyle,item);
         utils.setOnOkListener(new EnterGoodsUtils.OnOkListener() {
             @Override
-            public void onOk(int number, String address, String position,int newPrice) {
+            public void onOk(float number, String address, String position,int newPrice) {
                 submit(item,itemPos,address,number,position,newPrice);
             }
         });
@@ -102,7 +102,7 @@ public class EnterGoodsModel extends BaseModel<BaseActivity, ActivityEnterGoodsB
         utils.show();
     }
 
-    private void submit(final EnterGoods.Entity item, final int itemPos, final String address, int number, String position,int newPrice){
+    private void submit(final EnterGoods.Entity item, final int itemPos, final String address, float number, String position,int newPrice){
         HttpUtils.getInstance().enterStore(
                 entity.getInstitutionId(),
                 entity.getId(),

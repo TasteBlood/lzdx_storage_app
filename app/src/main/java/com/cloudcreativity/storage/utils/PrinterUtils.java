@@ -110,11 +110,11 @@ public class PrinterUtils {
     public boolean printDocument(String goodsName,String providerName,float price,String qrCodeUrl){
         if(api==null) return false;
         api.startJob(40,60,0);
-        api.drawText("兰大后勤保障部",6,2,30,10,4);
-        api.drawText("名称:"+goodsName,1,10,35,10,3);
-        api.drawText("供应商:"+(TextUtils.isEmpty(providerName)?"不详":providerName),1,18,35,10,3);
-        api.drawText("单价:￥"+price,1,26,35,10,3);
-        api.draw2DQRCode(qrCodeUrl,8,34,20);
+        api.drawText("兰大后勤保障部",5,1,30,10,4);
+        api.drawText("名称:"+goodsName,0.5,10,35,10,3);
+        api.drawText("供应商:"+(TextUtils.isEmpty(providerName)?"不详":providerName),0.5,16,35,10,3);
+        api.drawText("单价:￥"+price,0.5,22,35,10,3);
+        api.draw2DQRCode(qrCodeUrl,8,30,20);
         return !api.commitJob();
     }
 

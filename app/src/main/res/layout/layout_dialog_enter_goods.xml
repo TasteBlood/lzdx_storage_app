@@ -83,7 +83,20 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="新价格："/>
+                android:text="单价："/>
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray_414141"
+                android:textSize="16sp"
+                android:text="@{utils.entity.formatPrice()}"
+                android:inputType="numberDecimal"
+                android:padding="5dip" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="新单价："/>
             <android.support.v7.widget.AppCompatEditText
                 android:layout_width="100dip"
                 android:layout_height="wrap_content"

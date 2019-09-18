@@ -69,6 +69,8 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
                 @Override
                 public void onData(String data) {
                     assert entity.get()!= null;
+                    data = data.replace("kg","");
+                    weight.set(data);
                 }
             });
         }catch (Exception e){
@@ -81,7 +83,7 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
         dismiss();
         if(onOkListener!=null){
             float price = TextUtils.isEmpty(newPrice.get())?0:Float.parseFloat(newPrice.get());
-            onOkListener.onOk(Integer.parseInt(weight.get()),address,position.get(),Float.valueOf(price*100).intValue());
+            onOkListener.onOk(Float.parseFloat(weight.get()),address,position.get(),Float.valueOf(price*100).intValue());
         }
     }
 
@@ -92,7 +94,7 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
     }
 
     public interface OnOkListener{
-        void onOk(int number,String address,String position,int newPrice);
+        void onOk(float number,String address,String position,int newPrice);
     }
 
 }

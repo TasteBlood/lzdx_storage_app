@@ -1,6 +1,5 @@
 package com.cloudcreativity.storage.entity;
 
-import com.cloudcreativity.storage.base.BaseResult;
 import com.cloudcreativity.storage.utils.StrUtils;
 
 import java.io.Serializable;
@@ -13,7 +12,7 @@ import java.util.List;
  * date-time: 2019/8/6 10:07
  * e-mail: xxw0701@sina.com
  */
-public class StoreGoods extends BaseResult {
+public class StoreGoods{
 
     private Page info;
 
@@ -55,7 +54,7 @@ public class StoreGoods extends BaseResult {
         private int storeId;
         private String minWarn;
         private int state;
-        private int stock;
+        private float stock;
         private String createTime;
         private String updateTime;
         private int stateGoods;
@@ -144,11 +143,11 @@ public class StoreGoods extends BaseResult {
             this.state = state;
         }
 
-        public int getStock() {
+        public float getStock() {
             return stock;
         }
 
-        public void setStock(int stock) {
+        public void setStock(float stock) {
             this.stock = stock;
         }
 

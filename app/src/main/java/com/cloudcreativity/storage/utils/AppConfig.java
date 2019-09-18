@@ -27,6 +27,11 @@ public class AppConfig {
     public static String FILE_NAME = "people_pass_image_%d.%s";
 
     /**
+     * 这是APP热更新的下载缓存目录
+     */
+    static String APP_HOT_UPDATE_FILE = "pass_app_hot_update.apk";
+
+    /**
     * @author : xuxiwu
     * created: 2019/8/2 16:22
     * desc: 用户角色

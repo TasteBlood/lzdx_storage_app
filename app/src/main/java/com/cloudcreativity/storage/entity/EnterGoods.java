@@ -39,7 +39,7 @@ public class EnterGoods extends BaseResult {
         private String accountId;
         private int state;
         private int goodsId;
-        private int number;
+        private float number;
         private int specsId;
         private int enterState;
         private int unitId;
@@ -146,11 +146,11 @@ public class EnterGoods extends BaseResult {
             this.goodsId = goodsId;
         }
 
-        public int getNumber() {
+        public float getNumber() {
             return number;
         }
 
-        public void setNumber(int number) {
+        public void setNumber(float number) {
             this.number = number;
         }
 

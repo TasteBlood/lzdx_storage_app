@@ -5,10 +5,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.databinding.ObservableField;
 
+import com.cloudcreativity.storage.base.CommonWebActivity;
 import com.cloudcreativity.storage.ui.config.BalanceActivity;
 import com.cloudcreativity.storage.databinding.ActivitySettingBinding;
 import com.cloudcreativity.storage.receiver.MyBusinessReceiver;
 import com.cloudcreativity.storage.utils.CacheUtils;
+import com.cloudcreativity.storage.utils.UpdateManager;
 
 public class SettingModel {
 
@@ -56,7 +58,11 @@ public class SettingModel {
         cache.set("0.0KB");
     }
 
-    public void test(){
-        context.startActivity(new Intent(context, BalanceActivity.class));
+    public void onVersionClick(){
+        UpdateManager.checkVersion(context,context);
+    }
+
+    public void onHelpClick(){
+        CommonWebActivity.startActivity(context,"用户使用帮助","file:////android_asset/help.html");
     }
 }

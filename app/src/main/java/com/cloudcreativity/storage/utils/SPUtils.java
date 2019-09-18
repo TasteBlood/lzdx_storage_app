@@ -18,6 +18,7 @@ public class SPUtils {
         String TOKEN = "app_request_token";
         String USER = "app_login_user";
         String ROLE = "app_login_user_role";
+        String IS_FIRST = "app_is_first";
     }
 
     private static SharedPreferences preferences;
@@ -67,6 +68,14 @@ public class SPUtils {
 
     public UserEntity.Entity getUser(){
         return new Gson().fromJson(preferences.getString(Config.USER,"{}"),UserEntity.Entity.class);
+    }
+
+    public void setIsFirst(boolean isFirst){
+         preferences.edit().putBoolean(Config.IS_FIRST,isFirst).apply();
+    }
+
+    public boolean getFirst(){
+        return preferences.getBoolean(Config.IS_FIRST,true);
     }
 
     //移除保存的数据

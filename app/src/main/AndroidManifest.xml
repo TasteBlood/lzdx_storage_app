@@ -28,6 +28,9 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false"/>
+    <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true" />
 
@@ -37,7 +40,6 @@
         android:allowBackup="true"
         android:icon="@mipmap/app_image"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
@@ -57,7 +59,7 @@
         <!-- Activity配置开始 -->
         <activity
             android:name=".ui.main.IndexActivity"
-            android:theme="@style/FullscreenTheme"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -94,7 +96,7 @@
         <activity android:name=".ui.enter.EnterGoodsListActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.config.PrinterActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ui.out.OutGoodsActivity" android:screenOrientation="portrait"/>
-
+        <activity android:name=".ui.main.GuideActivity" android:theme="@style/FullscreenTheme" />
 
         <!-- Activity配置结束 -->
 

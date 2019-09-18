@@ -166,6 +166,9 @@ public class CommonWebActivity extends AppCompatActivity implements View.OnClick
             case R.id.ib_previous:
                 if (webView.canGoBack())
                     webView.goBack();
+                else{
+                    finish();
+                }
                 break;
         }
     }

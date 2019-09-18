@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 
 import com.cloudcreativity.storage.R;
@@ -51,6 +52,14 @@ public class BuyAddPriceUtils extends Dialog {
     }
 
     public void onSave(){
+        if(provider.get()==null){
+            ToastUtils.showShortToast(getContext(),"供应商为空");
+            return;
+        }
+        if(TextUtils.isEmpty(price.get())){
+            ToastUtils.showShortToast(getContext(),"价格为空");
+            return;
+        }
         if(this.onOkListener!=null){
             this.onOkListener.onOk(provider.get(),Float.parseFloat(price.get()));
         }

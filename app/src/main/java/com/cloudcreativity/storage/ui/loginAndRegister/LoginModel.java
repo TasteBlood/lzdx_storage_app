@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import com.cloudcreativity.storage.R;
 import com.cloudcreativity.storage.base.BaseDialogImpl;
 import com.cloudcreativity.storage.base.BaseResult;
+import com.cloudcreativity.storage.base.CommonWebActivity;
 import com.cloudcreativity.storage.databinding.ActivityLoginBinding;
 import com.cloudcreativity.storage.entity.UserEntity;
 import com.cloudcreativity.storage.ui.main.MainActivity;
@@ -76,7 +77,7 @@ public class LoginModel {
 
     //询价员登录
     private void priceLogin(String phone, String pwd) {
-        HttpUtils.getInstance().priceLogin(phone,pwd)
+        HttpUtils.getInstance().adminLogin(phone,pwd,2)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<UserEntity>(baseDialog,true) {
@@ -107,7 +108,7 @@ public class LoginModel {
 
     //餐饮采价员登录
     private void restaurantLogin(String phone, String pwd) {
-        HttpUtils.getInstance().priceLogin(phone,pwd)
+        HttpUtils.getInstance().adminLogin(phone,pwd,0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<UserEntity>(baseDialog,true) {
@@ -138,7 +139,7 @@ public class LoginModel {
 
     //库管登录
     private void adminLogin(String phone, String pwd) {
-        HttpUtils.getInstance().adminLogin(phone,pwd)
+        HttpUtils.getInstance().adminLogin(phone,pwd,1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<UserEntity>(baseDialog,true) {
@@ -171,7 +172,7 @@ public class LoginModel {
      * 帮助点击
      */
     public void onHelpClick(){
-        ToastUtils.showShortToast(context,"帮助了");
+        CommonWebActivity.startActivity(context,"用户使用帮助","file:////android_asset/help.html");
     }
 
     /**

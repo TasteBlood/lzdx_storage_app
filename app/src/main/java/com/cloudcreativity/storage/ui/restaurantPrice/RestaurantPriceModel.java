@@ -119,9 +119,9 @@ public class RestaurantPriceModel extends BaseModel<BaseActivity, ActivityRestau
             }
 
             @Override
-            protected void onBindItem(ItemRestaurantPriceLayoutBinding binding, final Goods.Entity goods, int position) {
+            protected void onBindItem(ItemRestaurantPriceLayoutBinding binding, Goods.Entity goods, final int groupPos) {
                 binding.setItem(goods);
-                BaseBindingRecyclerViewAdapter<Goods.Specs, ItemLayoutRestaurantSpecsItemBinding> adapter =
+                final BaseBindingRecyclerViewAdapter<Goods.Specs, ItemLayoutRestaurantSpecsItemBinding> adapter =
                         new BaseBindingRecyclerViewAdapter<Goods.Specs, ItemLayoutRestaurantSpecsItemBinding>(context) {
                             @Override
                             protected int getLayoutResId(int viewType) {
@@ -138,7 +138,7 @@ public class RestaurantPriceModel extends BaseModel<BaseActivity, ActivityRestau
                                         priceUtils.setOnOkListener(new RestaurantPriceUtils.OnOkListener() {
                                             @Override
                                             public void onOk(Provider.Entity entity, float price, String address, String remarks) {
-                                                addPrice(item.getGoodsId(),item.getId(),Float.valueOf(price*100).intValue(),address,remarks,entity.getId());
+                                                addPrice(item.getGoodsId(),item.getId(),Float.valueOf(price*100).intValue(),address,remarks,entity.getId(),groupPos,item);
                                             }
                                         });
                                         priceUtils.show();
@@ -161,14 +161,17 @@ public class RestaurantPriceModel extends BaseModel<BaseActivity, ActivityRestau
     }
 
     //添加采价
-    private void addPrice(int goodsId, int id, int money, String address,String remarks,int providerId) {
+    private void addPrice(int goodsId, int id, final int money, String address, String remarks, int providerId, final int groupPos, final Goods.Specs item) {
         HttpUtils.getInstance().addRestaurantPrice(goodsId,id,providerId,money,remarks,address)
                 .subscribeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BaseResult>(context,true) {
                     @Override
                     public void onSuccess(BaseResult baseResult) {
                         ToastUtils.showShortToast(context,"采价成功");
+                        item.setPrice(money);
+                        adapter.notifyItemChanged(groupPos);
+
                     }
                 });
     }

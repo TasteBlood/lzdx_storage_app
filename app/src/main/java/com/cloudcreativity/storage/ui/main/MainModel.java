@@ -26,9 +26,7 @@ public class MainModel extends BaseModel<BaseActivity,ActivityMainBinding> {
 
     MainModel(BaseActivity context, ActivityMainBinding binding, BaseDialogImpl baseDialog) {
         super(context, binding, baseDialog);
-        View headerView = binding.nvMain.getHeaderView(0);
-        TextView tv_name = headerView.findViewById(R.id.tv_name);
-        tv_name.setText(SPUtils.get().getUser().getAccountName());
+        binding.tvName.setText("欢迎您,"+SPUtils.get().getUser().getAccountName());
     }
 
     //scan click
@@ -76,6 +74,10 @@ public class MainModel extends BaseModel<BaseActivity,ActivityMainBinding> {
             return;
         }
         context.startActivity(new Intent(context, BuyPriceActivity.class));
+    }
+
+    public void onSettingClick(){
+        context.startActivity(new Intent(context, SettingActivity.class));
     }
 
     public void onRestaurantPriceClick(){

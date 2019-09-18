@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/gray_f1f1f1</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <!--自定义ProgressBar样式-->
@@ -69,6 +71,20 @@
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <!--自定义对话框2-->
+    <style name="myDialogStyleAnim">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/animDialogAnimation</item>
+    </style>
+
+    <!--对话框进出动画-->
+    <style name="animDialogAnimation" parent="Animation.AppCompat.Dialog">
+        <item name="android:windowEnterAnimation">@anim/anim_dialog_enter_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/anim_dialog_exit_to_bottom</item>
     </style>
 
 </resources>

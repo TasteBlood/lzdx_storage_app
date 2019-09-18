@@ -3,12 +3,15 @@ package com.cloudcreativity.storage.ui.main;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
@@ -27,6 +30,11 @@ public class IndexActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE|View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
         String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             init();
@@ -50,12 +58,16 @@ public class IndexActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (SPUtils.get().isLogin()) {
-                    //跳转到主页
-                    startActivity(new Intent().setClass(IndexActivity.this, MainActivity.class));
-                } else {
-                    //跳转到登录
-                    startActivity(new Intent().setClass(IndexActivity.this, LoginActivity.class));
+                if(SPUtils.get().getFirst()){
+                    startActivity(new Intent().setClass(IndexActivity.this, GuideActivity.class));
+                }else{
+                    if (SPUtils.get().isLogin()) {
+                        //跳转到主页
+                        startActivity(new Intent().setClass(IndexActivity.this, MainActivity.class));
+                    } else {
+                        //跳转到登录
+                        startActivity(new Intent().setClass(IndexActivity.this, LoginActivity.class));
+                    }
                 }
                 onBackPressed();
             }

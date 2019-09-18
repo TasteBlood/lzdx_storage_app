@@ -113,7 +113,7 @@ public class OutGoodsModel extends BaseModel<BaseActivity, ActivityOutGoodsBindi
                 SPUtils.get().getUser().getPersonName(),
                 address,
                 item.getSpecsId(),
-                item.getId(),
+                item.getUnitId(),
                 item.getGoodsId(),
                 entity.getStoreId(),
                 personId,

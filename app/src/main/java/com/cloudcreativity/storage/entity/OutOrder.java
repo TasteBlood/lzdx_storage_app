@@ -202,14 +202,19 @@ public class OutOrder extends BaseResult {
         private int goodsId;
         private int specsId;
         private int applyId;
-        private int number;
+        private float number;
         private int state;
+        private int unitId;
         private String createTime;
         private String goodsName;
         private String specsName;
         private String unitName;
         private int articleId;
         private int price;
+
+        public void setUintId(int unitId) {
+            this.unitId = unitId;
+        }
 
         public int getPrice() {
             return price;
@@ -259,12 +264,20 @@ public class OutOrder extends BaseResult {
             this.applyId = applyId;
         }
 
-        public int getNumber() {
+        public float getNumber() {
             return number;
         }
 
-        public void setNumber(int number) {
+        public void setNumber(float number) {
             this.number = number;
+        }
+
+        public int getUnitId() {
+            return unitId;
+        }
+
+        public void setUnitId(int unitId) {
+            this.unitId = unitId;
         }
 
         public int getState() {

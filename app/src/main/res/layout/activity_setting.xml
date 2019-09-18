@@ -41,7 +41,6 @@
         </FrameLayout>
 
         <View
-            android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
@@ -49,7 +48,7 @@
         <FrameLayout
             android:background="@color/white"
             android:padding="15dip"
-            android:onClick="@{()->setModel.test()}"
+            android:onClick="@{()->setModel.onVersionClick()}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -62,6 +61,29 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="@{setModel.version}"
+                android:textSize="16sp"/>
+        </FrameLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <FrameLayout
+            android:background="@color/white"
+            android:padding="15dip"
+            android:onClick="@{()->setModel.onHelpClick()}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="@string/str_system_help"/>
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:textSize="16sp"/>
         </FrameLayout>
         <android.support.v7.widget.AppCompatButton

@@ -77,6 +77,7 @@ dependencies {
     implementation 'com.qiniu:qiniu-android-sdk:7.3.10'
     implementation 'com.github.bumptech.glide:glide:4.5.0'
     implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+    implementation 'com.jaeger.statusbarutil:library:1.4.0'
     implementation group: 'org.greenrobot', name: 'eventbus', version: '3.1.1'
 
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
