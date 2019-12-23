@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="role">
-        <item>餐饮采价员</item>
-        <item>采购询价员</item>
-        <item>仓库管理员</item>
+        <item>餐饮采价</item>
+        <item>采购询价</item>
+        <item>出库审批</item>
+        <item>仓库管理</item>
+        <item>中心负责人</item>
+        <item>主管部领导</item>
+        <item>财务审核人</item>
+        <item>部领导</item>
     </string-array>
 </resources>

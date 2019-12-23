@@ -56,7 +56,7 @@
             </LinearLayout>
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_category"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
@@ -70,15 +70,28 @@
                 android:drawableEnd="@drawable/ic_keyboard_arrow_down_black_24dp"
                 android:text="@{model.selectCategory}"/>
         </LinearLayout>
-        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-            android:id="@+id/refresh_goods"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rcv_goods"
-                android:adapter="@{model.adapter}"
+            <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+                android:id="@+id/refresh_goods"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcv_goods"
+                    android:adapter="@{model.adapter}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:backgroundTint="@color/colorPrimary"
+                android:layout_alignParentBottom="true"
+                android:src="@mipmap/ic_float_out"
+                android:onClick="@{()->model.onOutClick()}"
+                android:layout_margin="10dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+        </RelativeLayout>
+
     </LinearLayout>
 </layout>

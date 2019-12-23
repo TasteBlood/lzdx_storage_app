@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="model"
+            type="com.cloudcreativity.storage.ui.approve.ApproveUnpassModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
+            android:id="@+id/refreshApproveUn"
+            app:tr_enable_loadmore="true"
+            app:tr_enable_refresh="true"
+            app:tr_autoLoadMore="true"
+            app:tr_head_height="50dip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rcv_approve_un"
+                android:adapter="@{model.adapter}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <include android:visibility="gone" layout="@layout/layout_no_data" android:id="@+id/noData"/>
+        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+    </LinearLayout>
+</layout>

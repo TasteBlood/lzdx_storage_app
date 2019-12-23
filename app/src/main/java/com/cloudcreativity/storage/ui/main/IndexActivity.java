@@ -16,16 +16,20 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 
 import com.cloudcreativity.storage.R;
+import com.cloudcreativity.storage.base.BaseDialogImpl;
 import com.cloudcreativity.storage.ui.buyPrice.ProviderActivity;
 import com.cloudcreativity.storage.ui.loginAndRegister.LoginActivity;
 import com.cloudcreativity.storage.utils.SPUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
+import com.cloudcreativity.storage.utils.UpdateManager;
+
+import io.reactivex.disposables.Disposable;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class IndexActivity extends AppCompatActivity {
+public class IndexActivity extends AppCompatActivity implements BaseDialogImpl {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,5 +95,40 @@ public class IndexActivity extends AppCompatActivity {
             ToastUtils.showShortToast(this,"请打开权限");
             onBackPressed();
         }
+    }
+
+    @Override
+    public boolean addRxDestroy(Disposable disposable) {
+        return false;
+    }
+
+    @Override
+    public void remove(Disposable disposable) {
+
+    }
+
+    @Override
+    public void showProgress(String msg) {
+
+    }
+
+    @Override
+    public void dismissProgress() {
+
+    }
+
+    @Override
+    public void showUserAuthOutDialog() {
+
+    }
+
+    @Override
+    public void openPictureDialog(boolean isCrop) {
+
+    }
+
+    @Override
+    public void showRequestErrorMessage(String message) {
+
     }
 }

@@ -46,12 +46,14 @@
                 android:layout_weight="1"
                 android:padding="8dip"
                 android:textSize="14sp"
+                android:text="@={model.key}"
                 android:hint="请输入关键词查询"
                 android:background="@drawable/input_rect"/>
             <android.support.v7.widget.AppCompatButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:theme="@style/Button"
+                android:onClick="@{()->model.onSearchClick()}"
                 android:text="查询"/>
         </LinearLayout>
         <View

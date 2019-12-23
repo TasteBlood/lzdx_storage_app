@@ -74,6 +74,15 @@ public class StoreGoods{
         private String specsName;
         private String enterStoreDomains;
         private String outStoreDomains;
+        private float number;
+
+        public float getNumber() {
+            return number;
+        }
+
+        public void setNumber(float number) {
+            this.number = number;
+        }
 
         public String formatPrice(){
             return "￥"+ StrUtils.get2BitDecimal(this.price/100f);

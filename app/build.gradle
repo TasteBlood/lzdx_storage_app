@@ -6,8 +6,8 @@ android {
         applicationId "com.cloudcreativity.storage"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 10
+        versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -81,4 +81,6 @@ dependencies {
     implementation group: 'org.greenrobot', name: 'eventbus', version: '3.1.1'
 
     implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+    implementation project(path: ':DFileSelector')
+    implementation 'com.ycjiang:imgepreviewlibrary:1.1.3'
 }

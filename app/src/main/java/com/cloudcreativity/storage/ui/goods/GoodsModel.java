@@ -1,6 +1,5 @@
 package com.cloudcreativity.storage.ui.goods;
 
-import android.content.Intent;
 import android.databinding.ObservableField;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -17,6 +16,8 @@ import com.cloudcreativity.storage.databinding.ActivityGoodsBinding;
 import com.cloudcreativity.storage.databinding.ItemLayoutGoodsBinding;
 import com.cloudcreativity.storage.entity.Category;
 import com.cloudcreativity.storage.entity.StoreGoods;
+import com.cloudcreativity.storage.entity.UserEntity;
+import com.cloudcreativity.storage.utils.ApplyOutGoodsUtils;
 import com.cloudcreativity.storage.utils.CategoryWindowUtils;
 import com.cloudcreativity.storage.utils.DefaultObserver;
 import com.cloudcreativity.storage.utils.HttpUtils;
@@ -24,8 +25,11 @@ import com.cloudcreativity.storage.utils.JudgeGoodsUtils;
 import com.cloudcreativity.storage.utils.QrCodeDialogUtils;
 import com.cloudcreativity.storage.utils.SPUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
+import com.google.gson.Gson;
 import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+
+import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -42,8 +46,34 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
     private Integer oneId = 0;
     private Integer twoId = 0;
 
+    private ApplyOutGoodsUtils outGoodsUtils;
+
     GoodsModel(BaseActivity context, ActivityGoodsBinding binding, BaseDialogImpl baseDialog) {
         super(context, binding, baseDialog);
+        outGoodsUtils = new ApplyOutGoodsUtils(context,R.style.myDialogStyleAnim);
+        outGoodsUtils.setOnSubmitListener(new ApplyOutGoodsUtils.OnSubmitListener() {
+            @Override
+            public void onSubmit(String memo, List<StoreGoods.Entity> goods) {
+                submitOut(memo,goods);
+            }
+        });
+    }
+
+    //添加出库申请单
+    private void submitOut(String memo, List<StoreGoods.Entity> goods) {
+        UserEntity.Entity user = SPUtils.get().getUser();
+        HttpUtils.getInstance().applyOut(user.getAccountId(),user.getStoreId(),memo,user.getInstitutionId(),new Gson().toJson(goods))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DefaultObserver<BaseResult>(getBaseDialog(),true) {
+                    @Override
+                    public void onSuccess(BaseResult t) {
+                        if(t.getStatus()==1){
+                            ToastUtils.showShortToast(context,"申请出库单成功");
+                            outGoodsUtils.clear();
+                        }
+                    }
+                });
     }
 
     @Override
@@ -122,6 +152,14 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
                         judgeGoodsUtils.show();
                     }
                 });
+
+                binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //发送添加到出库单
+                        pushGoods(item);
+                    }
+                });
             }
 
             @Override
@@ -131,6 +169,11 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
         };
 
         binding.refreshGoods.startRefresh();
+    }
+
+    //添加出库单操作
+    private void pushGoods(StoreGoods.Entity item) {
+        outGoodsUtils.pushGoods(item);
     }
 
     //开始盘点
@@ -186,8 +229,12 @@ public class GoodsModel extends BaseModel<BaseActivity, ActivityGoodsBinding> {
         binding.refreshGoods.startRefresh();
     }
 
+    public void onOutClick(){
+        outGoodsUtils.show();
+    }
+
     private void loadData(final int page, int size, int oneId, int twoId, String key){
-        HttpUtils.getInstance().getStoreGoods(page,size, SPUtils.get().getUser().getStoreId(),key)
+        HttpUtils.getInstance().getStoreGoods(page,size, SPUtils.get().getUser().getStoreId(),key,oneId,twoId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<StoreGoods>(getBaseDialog(),false) {

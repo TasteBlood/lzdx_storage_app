@@ -16,7 +16,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             android:background="@color/colorPrimary"
             android:elevation="3dip"
-            app:title="采购采价"
+            app:title="采购询价"
             app:titleTextColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize" />

@@ -4,8 +4,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.cloudcreativity.storage.base.BaseApp;
+import com.cloudcreativity.storage.entity.LoginAccount;
 import com.cloudcreativity.storage.entity.UserEntity;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * 这是SharePreferences工具
@@ -19,6 +24,7 @@ public class SPUtils {
         String USER = "app_login_user";
         String ROLE = "app_login_user_role";
         String IS_FIRST = "app_is_first";
+        String LOGIN_ACCOUNT = "login_account";
     }
 
     private static SharedPreferences preferences;
@@ -93,5 +99,15 @@ public class SPUtils {
 
     public void setRole(int role){
         preferences.edit().putInt(Config.ROLE,role).apply();
+    }
+
+    public List<LoginAccount> getAccounts(){
+        Type typeToken = new TypeToken<List<LoginAccount>>() {
+        }.getType();
+        return new Gson().fromJson(preferences.getString(Config.LOGIN_ACCOUNT,"[]"),typeToken);
+    }
+
+    public void setAccounts(List<LoginAccount> accounts){
+        preferences.edit().putString(Config.LOGIN_ACCOUNT,new Gson().toJson(accounts)).apply();
     }
 }

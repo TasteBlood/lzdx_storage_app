@@ -37,6 +37,7 @@ public class RestaurantPriceModel extends BaseModel<BaseActivity, ActivityRestau
     private int twoId;
     public BaseBindingRecyclerViewAdapter<Goods.Entity, ItemRestaurantPriceLayoutBinding> adapter;
     private RestaurantPriceUtils priceUtils;
+    private Provider.Entity provider;
 
     RestaurantPriceModel(BaseActivity context, ActivityRestaurentPriceBinding binding, BaseDialogImpl baseDialog) {
         super(context, binding, baseDialog);
@@ -135,6 +136,10 @@ public class RestaurantPriceModel extends BaseModel<BaseActivity, ActivityRestau
                                     @Override
                                     public void onClick(View v) {
                                         priceUtils = new RestaurantPriceUtils(context, R.style.myProgressDialogStyle,RestaurantPriceModel.this.context);
+
+                                        if(provider!=null)
+                                            priceUtils.setProvider(provider);
+
                                         priceUtils.setOnOkListener(new RestaurantPriceUtils.OnOkListener() {
                                             @Override
                                             public void onOk(Provider.Entity entity, float price, String address, String remarks) {
@@ -158,6 +163,7 @@ public class RestaurantPriceModel extends BaseModel<BaseActivity, ActivityRestau
 
     void onResult(Provider.Entity entity){
         priceUtils.setProvider(entity);
+        this.provider = entity;
     }
 
     //添加采价

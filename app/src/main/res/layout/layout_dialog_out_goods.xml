@@ -81,6 +81,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:text="使用方:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <EditText
+                android:padding="5dip"
+                android:hint="请输入使用方"
+                android:textSize="16sp"
+                android:text="@={utils.user}"
+                android:background="@drawable/input_line"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_out"
             android:theme="@style/Button"

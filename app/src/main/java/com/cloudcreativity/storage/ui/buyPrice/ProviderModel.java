@@ -2,6 +2,7 @@ package com.cloudcreativity.storage.ui.buyPrice;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.databinding.ObservableField;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -25,6 +26,7 @@ public class ProviderModel extends BaseModel<BaseActivity, ActivityProviderBindi
 
     private int pageNum = 1;
     private int size = 10;
+    public ObservableField<String> key = new ObservableField<>();
     public BaseBindingRecyclerViewAdapter<Provider.Entity, ItemLayoutProviderBinding> adapter;
     ProviderModel(BaseActivity context, ActivityProviderBinding binding, BaseDialogImpl baseDialog) {
         super(context, binding, baseDialog);
@@ -83,8 +85,13 @@ public class ProviderModel extends BaseModel<BaseActivity, ActivityProviderBindi
         context.startActivity(new Intent(context,AddProviderActivity.class));
     }
 
+    public void onSearchClick(){
+        this.pageNum = 1;
+        this.loadData(this.pageNum,this.size);
+    }
+
     private void loadData(final int page,int size){
-        HttpUtils.getInstance().getProviders(page,size)
+        HttpUtils.getInstance().getProviders(page,size,key.get())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<Provider>(getBaseDialog()) {

@@ -65,7 +65,7 @@ public class OrderDetailDialogUtils extends Dialog {
     }
 
     private void loadData(int oid){
-        HttpUtils.getInstance().getBuyGoods(oid)
+        HttpUtils.getInstance().getBuyGoods(oid,1,100)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BuyGoods>(baseDialog,false) {

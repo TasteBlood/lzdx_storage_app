@@ -43,13 +43,26 @@ public class BuyGoods extends BaseResult {
         private int orderId;
         private String price;
         private String nRemarks;
-        private int number;
+        private double number;
         private int state;
         private String createTime;
         private int specsId;
         private String goodsName;
         private String specsName;
         private String unitName;
+        private List<ServeyInfo> surveyGoodsDomains;
+
+        public List<ServeyInfo> getSurveyGoodsDomains() {
+            return surveyGoodsDomains;
+        }
+
+        public void setSurveyGoodsDomains(List<ServeyInfo> surveyGoodsDomains) {
+            this.surveyGoodsDomains = surveyGoodsDomains;
+        }
+
+        public boolean isPrice(){
+            return this.surveyGoodsDomains != null && !this.surveyGoodsDomains.isEmpty();
+        }
 
         public String getUnitName() {
             return unitName;
@@ -99,11 +112,11 @@ public class BuyGoods extends BaseResult {
             this.nRemarks = nRemarks;
         }
 
-        public int getNumber() {
+        public double getNumber() {
             return number;
         }
 
-        public void setNumber(int number) {
+        public void setNumber(double number) {
             this.number = number;
         }
 
@@ -145,6 +158,27 @@ public class BuyGoods extends BaseResult {
 
         public void setSpecsName(String specsName) {
             this.specsName = specsName;
+        }
+
+        public class ServeyInfo{
+            private int providerId;
+            private int price;
+
+            public int getProviderId() {
+                return providerId;
+            }
+
+            public void setProviderId(int providerId) {
+                this.providerId = providerId;
+            }
+
+            public int getPrice() {
+                return price;
+            }
+
+            public void setPrice(int price) {
+                this.price = price;
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
  * date-time: 2019/8/7 18:01
  * e-mail: xxw0701@sina.com
  */
-public class OutOrder extends BaseResult {
+public class OutOrder extends BaseResult implements Serializable{
 
     private List<Entity> info;
 
@@ -29,6 +29,7 @@ public class OutOrder extends BaseResult {
         private List<ApplyAccountDomain> applyAccountDomain;
         private List<AccountDomain> accountDomain;
         private List<OutAccount> storeAccountDomains;
+        private List<OutGoods> goodsDomains;
         private String createTime;
         private int applyAccountId;
         private String storeName;
@@ -36,6 +37,14 @@ public class OutOrder extends BaseResult {
         private int id;
         private int state;
         private int storeId;
+
+        public List<OutGoods> getGoodsDomains() {
+            return goodsDomains;
+        }
+
+        public void setGoodsDomains(List<OutGoods> goodsDomains) {
+            this.goodsDomains = goodsDomains;
+        }
 
         public List<OutAccount> getStoreAccountDomains() {
             return storeAccountDomains;
@@ -197,7 +206,7 @@ public class OutOrder extends BaseResult {
 
     }
 
-    public class OutGoods{
+    public class OutGoods implements Serializable{
         private int id;
         private int goodsId;
         private int specsId;

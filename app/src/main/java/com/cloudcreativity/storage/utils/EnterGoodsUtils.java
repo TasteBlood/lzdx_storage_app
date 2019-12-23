@@ -15,6 +15,8 @@ import com.cloudcreativity.storage.R;
 import com.cloudcreativity.storage.databinding.LayoutDialogEnterGoodsBinding;
 import com.cloudcreativity.storage.entity.EnterGoods;
 
+import java.math.BigDecimal;
+
 /**
  * All Rights Reserved By CloudCreativity Tech.
  * @author : created by Xu Xiwu
@@ -27,6 +29,8 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
     public ObservableField<String> position = new ObservableField<>();
     public ObservableField<String> weight = new ObservableField<>();
     public ObservableField<String> newPrice = new ObservableField<>();
+    public ObservableField<String> productDate = new ObservableField<>();
+    public ObservableField<String> period = new ObservableField<>();
 
     private OnOkListener onOkListener;
     private String address;
@@ -69,7 +73,6 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
                 @Override
                 public void onData(String data) {
                     assert entity.get()!= null;
-                    data = data.replace("kg","");
                     weight.set(data);
                 }
             });
@@ -82,8 +85,15 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
     public void onOk(){
         dismiss();
         if(onOkListener!=null){
-            float price = TextUtils.isEmpty(newPrice.get())?0:Float.parseFloat(newPrice.get());
-            onOkListener.onOk(Float.parseFloat(weight.get()),address,position.get(),Float.valueOf(price*100).intValue());
+            if(TextUtils.isEmpty(newPrice.get())){
+                onOkListener.onOk(Double.parseDouble(weight.get()),address,position.get(),0,
+                        productDate.get(),TextUtils.isEmpty(period.get())?0:Integer.parseInt(period.get()));
+            }else{
+                BigDecimal d1 = new BigDecimal(newPrice.get());
+                BigDecimal d2 = new BigDecimal("100");
+                onOkListener.onOk(Double.parseDouble(weight.get()),address,position.get(),d1.multiply(d2).intValue(),
+                        productDate.get(),TextUtils.isEmpty(period.get())?0:Integer.parseInt(period.get()));
+            }
         }
     }
 
@@ -94,7 +104,19 @@ public class EnterGoodsUtils extends Dialog implements DialogInterface.OnDismiss
     }
 
     public interface OnOkListener{
-        void onOk(float number,String address,String position,int newPrice);
+        void onOk(double number,String address,String position,int newPrice,String productDate,int period);
+    }
+
+    public void onProductDateClick(){
+        DatePicker datePicker = new DatePicker(getContext(),R.style.myProgressDialogStyle);
+        datePicker.setOnDateChangeLisntener(new DatePicker.OnDateChangeListener() {
+            @Override
+            public void onChange(int year, int month, int day) {
+                productDate.set(year+"-"+(month+1)+"-"+day);
+            }
+        });
+
+        datePicker.show();
     }
 
 }

@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <!--content widgets-->
-                <android.support.v7.widget.AppCompatEditText
+                <android.support.v7.widget.AppCompatAutoCompleteTextView
                     android:id="@+id/et_phone"
                     android:layout_marginTop="10dip"
                     android:layout_width="match_parent"
@@ -79,6 +79,8 @@
                     android:hint="@string/str_input_phone"
                     android:singleLine="true"
                     android:padding="10dip"
+                    android:completionThreshold="1"
+                    android:imeOptions="actionNext"
                     android:text="@={loginModel.phone}" />
 
                 <android.support.v7.widget.AppCompatEditText

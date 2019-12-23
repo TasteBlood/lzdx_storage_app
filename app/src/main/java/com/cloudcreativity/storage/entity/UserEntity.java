@@ -26,6 +26,7 @@ public class UserEntity extends BaseResult {
         private String accountName;
         private String accountPwd;
         private int storeId;
+        private String storeName;
         private int state;
         private String createTime;
         private String salt;
@@ -34,6 +35,14 @@ public class UserEntity extends BaseResult {
         private String token;
         private int institutionId;
         private String institutionName;
+
+        public String getStoreName() {
+            return storeName;
+        }
+
+        public void setStoreName(String storeName) {
+            this.storeName = storeName;
+        }
 
         public int getId() {
             return id;
@@ -130,5 +139,9 @@ public class UserEntity extends BaseResult {
         public void setInstitutionName(String institutionName) {
             this.institutionName = institutionName;
         }
+    }
+
+    public class PersonEntity{
+
     }
 }

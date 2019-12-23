@@ -76,6 +76,8 @@
 -keep class com.cloudcreativity.storage.entity.**{*;}
 -keep class com.cloudcreativity.storage.utils.**{*;}
 -keep class com.cloudcreativity.storage.view.**{*;}
+## 保持注解
+-keepattributes Signature
 
 
 #如果有其它包有warning，在报出warning的包加入下面类似的-dontwarn 报名

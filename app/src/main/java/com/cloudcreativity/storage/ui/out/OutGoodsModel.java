@@ -38,6 +38,8 @@ public class OutGoodsModel extends BaseModel<BaseActivity, ActivityOutGoodsBindi
     private OutOrder.Entity entity;
     public BaseBindingRecyclerViewAdapter<OutOrder.OutGoods, ItemLayoutWaitOutGoodsBinding> adapter;
 
+    private String user;
+
     OutGoodsModel(BaseActivity context, ActivityOutGoodsBinding binding, BaseDialogImpl baseDialog,OutOrder.Entity entity) {
         super(context, binding, baseDialog);
         this.entity = entity;
@@ -94,11 +96,13 @@ public class OutGoodsModel extends BaseModel<BaseActivity, ActivityOutGoodsBindi
                             ToastUtils.showShortToast(context,"物品领取人为空，无法出库");
                             return;
                         }
-                        OutGoodsUtils utils = new OutGoodsUtils(context,R.style.myProgressDialogStyle,item,entity.getStoreAccountDomains());
+                        OutGoodsUtils utils = new OutGoodsUtils(context,R.style.myProgressDialogStyle,
+                                item,entity.getStoreAccountDomains(),OutGoodsModel.this.user);
                         utils.setOnOkListener(new OutGoodsUtils.OnOkListener() {
                             @Override
-                            public void onOk(String address, int personId) {
-                                outGoods(item,position,address,personId);
+                            public void onOk(String address, int personId,String user) {
+                                OutGoodsModel.this.user = user;
+                                outGoods(item,position,address,personId,user);
                             }
                         });
                         utils.show();
@@ -108,7 +112,7 @@ public class OutGoodsModel extends BaseModel<BaseActivity, ActivityOutGoodsBindi
         };
     }
 
-    private void outGoods(final OutOrder.OutGoods item, final int position,String address,int personId) {
+    private void outGoods(final OutOrder.OutGoods item, final int position,String address,int personId,String user) {
         HttpUtils.getInstance().outRecord(item.getNumber(),
                 SPUtils.get().getUser().getPersonName(),
                 address,
@@ -119,7 +123,8 @@ public class OutGoodsModel extends BaseModel<BaseActivity, ActivityOutGoodsBindi
                 personId,
                 item.getArticleId(),
                 entity.getId(),
-                item.getPrice())
+                item.getPrice(),
+                user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BaseResult>(getBaseDialog(),true) {

@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import com.cloudcreativity.storage.R;
 import com.cloudcreativity.storage.base.BaseActivity;
 import com.cloudcreativity.storage.databinding.ActivityLoginBinding;
+import com.cloudcreativity.storage.utils.UpdateManager;
 import com.jaeger.library.StatusBarUtil;
 
 /**
@@ -20,6 +21,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UpdateManager.checkVersion(this,this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(Color.TRANSPARENT);

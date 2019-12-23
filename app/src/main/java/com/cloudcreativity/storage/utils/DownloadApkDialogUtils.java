@@ -188,9 +188,9 @@ public class DownloadApkDialogUtils extends AsyncTask<String,Integer,String>{
                         activity.startActivity(intent);
 
                         //直接关闭当前的app
-                        Intent broadcast1 = new Intent();
-                        broadcast1.setAction(MyBusinessReceiver.ACTION_EXIT_APP);
-                        activity.sendBroadcast(broadcast1);
+//                        Intent broadcast1 = new Intent();
+//                        broadcast1.setAction(MyBusinessReceiver.ACTION_EXIT_APP);
+//                        activity.sendBroadcast(broadcast1);
                         break;
                 }
             }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -68,6 +69,13 @@ public class RestaurantPriceUtils extends Dialog {
     }
 
     public void onSave(){
+        if(provider.get()==null){
+            ToastUtils.showShortToast(getContext(),"供应商为空");
+            return;
+        }
+        if(TextUtils.isEmpty(price.get())){
+            return;
+        }
         if(this.onOkListener!=null){
             this.onOkListener.onOk(provider.get(),Float.parseFloat(price.get()),address.get(),remarks.get());
         }

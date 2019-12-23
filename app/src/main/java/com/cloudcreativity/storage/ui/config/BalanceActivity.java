@@ -195,7 +195,7 @@ public class BalanceActivity extends BaseActivity {
             BalanceUtils.getInstance().readData(this, new BalanceUtils.OnDataListener() {
                 @Override
                 public void onData(String data) {
-                    ToastUtils.showShortToast(BalanceActivity.this,data);
+                    ToastUtils.showShortToast(BalanceActivity.this,String.valueOf(Float.parseFloat(data)));
                 }
             });
         }catch (Exception e){

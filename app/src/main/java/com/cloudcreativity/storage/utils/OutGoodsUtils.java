@@ -33,16 +33,21 @@ public class OutGoodsUtils extends Dialog implements DialogInterface.OnDismissLi
     private int personId;
     private final LocationUtils instance;
 
+    public ObservableField<String> user = new ObservableField<>();
+
     public void setOnOkListener(OnOkListener onOkListener) {
         this.onOkListener = onOkListener;
     }
 
-    public OutGoodsUtils(@NonNull Context context, int themeResId, OutOrder.OutGoods entity, final List<OutOrder.OutAccount> accounts) {
+    public OutGoodsUtils(@NonNull Context context, int themeResId, OutOrder.OutGoods entity, final List<OutOrder.OutAccount> accounts,String user) {
         super(context, themeResId);
 
         setOnDismissListener(this);
 
         this.entity.set(entity);
+
+        this.user.set(user);
+
         final LayoutDialogOutGoodsBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context),
                 R.layout.layout_dialog_out_goods, null, false);
         binding.btnOut.setEnabled(false);
@@ -92,7 +97,7 @@ public class OutGoodsUtils extends Dialog implements DialogInterface.OnDismissLi
     public void onOk(){
         dismiss();
         if(onOkListener!=null){
-            onOkListener.onOk(address,personId);
+            onOkListener.onOk(address,personId,user.get());
         }
     }
 
@@ -104,7 +109,7 @@ public class OutGoodsUtils extends Dialog implements DialogInterface.OnDismissLi
     }
 
     public interface OnOkListener{
-        void onOk(String address,int personId);
+        void onOk(String address,int personId,String user);
     }
 
 }

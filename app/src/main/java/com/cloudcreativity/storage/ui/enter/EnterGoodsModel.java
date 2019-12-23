@@ -14,6 +14,7 @@ import com.cloudcreativity.storage.databinding.ItemLayoutWaitEnterGoodsBinding;
 import com.cloudcreativity.storage.entity.BuyOrder;
 import com.cloudcreativity.storage.entity.EnterGoods;
 import com.cloudcreativity.storage.utils.DefaultObserver;
+import com.cloudcreativity.storage.utils.EnterGoodsConfirmUtils;
 import com.cloudcreativity.storage.utils.EnterGoodsUtils;
 import com.cloudcreativity.storage.utils.HttpUtils;
 import com.cloudcreativity.storage.utils.SPUtils;
@@ -94,15 +95,25 @@ public class EnterGoodsModel extends BaseModel<BaseActivity, ActivityEnterGoodsB
         EnterGoodsUtils utils = new EnterGoodsUtils(context,R.style.myProgressDialogStyle,item);
         utils.setOnOkListener(new EnterGoodsUtils.OnOkListener() {
             @Override
-            public void onOk(float number, String address, String position,int newPrice) {
-                submit(item,itemPos,address,number,position,newPrice);
+            public void onOk(final double number, final String address, final String position, final int newPrice, final String productDate, final int period) {
+
+                EnterGoodsConfirmUtils confirmUtils = new EnterGoodsConfirmUtils(context, item, number, address, position, newPrice, productDate, period);
+                confirmUtils.setOnOkListener(new EnterGoodsConfirmUtils.OnOkListener() {
+                    @Override
+                    public void onOk() {
+                        submit(item,itemPos,address,number,position,newPrice,productDate,period);
+                    }
+                });
+                confirmUtils.show();
+
             }
         });
 
         utils.show();
     }
 
-    private void submit(final EnterGoods.Entity item, final int itemPos, final String address, float number, String position,int newPrice){
+    private void submit(final EnterGoods.Entity item, final int itemPos, final String address, double number, String position,int newPrice,
+                        String productDate,int period){
         HttpUtils.getInstance().enterStore(
                 entity.getInstitutionId(),
                 entity.getId(),
@@ -117,7 +128,9 @@ public class EnterGoodsModel extends BaseModel<BaseActivity, ActivityEnterGoodsB
                 position,
                 address,
                 newPrice,
-                entity.getWayState())
+                entity.getWayState(),
+                productDate,
+                period)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BaseResult>(getBaseDialog(),true) {

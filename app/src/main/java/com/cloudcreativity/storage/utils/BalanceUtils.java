@@ -95,6 +95,7 @@ public class BalanceUtils {
                 try {
                     int len = is.read(buffer);
                     String data = new String(buffer,0,len);
+                    LogUtils.e("xuxiwu，原始数据",data);
                     if(isFirst){
                         data = "";
                         isFirst = false;
@@ -104,7 +105,7 @@ public class BalanceUtils {
                             .replaceAll("\\+0.00kg", "");
                     LogUtils.e("xuxiwu",final_data);
                     if (final_data.length() > 70) {
-                        final String[] date = final_data.split("\\+");
+                        final String[] date = final_data.split("=");
                         for (index = 0; index < date.length; index++) {
                             int count = 0;
                             for (int y = 0; y < date.length; y++) {
@@ -117,7 +118,7 @@ public class BalanceUtils {
                                     @Override
                                     public void run() {
                                         if(onDataListener!=null)
-                                            onDataListener.onData(date[index]);
+                                            onDataListener.onData(new StringBuilder(date[index]).reverse().toString());
                                         final_data = "";
                                         isFirst = true;
                                     }

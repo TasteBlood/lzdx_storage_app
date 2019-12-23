@@ -19,17 +19,17 @@ public class AppConfig {
     /**
      * 这是SharePreference的名称
      */
-    public static final String SP_NAME = "people_pass_app_config";
+    public static final String SP_NAME = "storage_app_config";
 
     /**
      * 这是统一的文件名
      */
-    public static String FILE_NAME = "people_pass_image_%d.%s";
+    public static String FILE_NAME = "storage_image_%d.%s";
 
     /**
      * 这是APP热更新的下载缓存目录
      */
-    static String APP_HOT_UPDATE_FILE = "pass_app_hot_update.apk";
+    static String APP_HOT_UPDATE_FILE = "storage_app_hot_update.apk";
 
     /**
     * @author : xuxiwu
@@ -40,6 +40,11 @@ public class AppConfig {
         int MANAGER = 1;
         int PRICE = 2;
         int RESTAURANT = 3;
+        int OUT_ADMIN = 4;
+        int SP_ZXFZR = 5;
+        int SP_ZGBLD = 6;
+        int SP_CWSP = 7;
+        int SP_BLD = 8;
     }
 
 }

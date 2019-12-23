@@ -20,6 +20,7 @@
             app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
             app:title="物品入库"/>
         <fragment
+            android:id="@+id/fragment_enter_list"
             android:tag="request_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

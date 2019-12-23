@@ -4,6 +4,8 @@
         <variable
             name="item"
             type="com.cloudcreativity.storage.entity.BuyOrder.Entity" />
+        <import type="android.view.View" />
+        <import type="android.text.TextUtils" />
     </data>
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,6 +76,16 @@
                     android:text="@{item.wayName}"
                     android:textColor="@color/gray_414141"/>
             </LinearLayout>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_contract"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="right"
+                android:padding="5dip"
+                android:visibility="@{TextUtils.isEmpty(item.fileUrl)?View.VISIBLE:View.GONE}"
+                android:text="采购合同上传"/>
         </LinearLayout>
         <android.support.v7.widget.AppCompatImageView
             android:src="@drawable/ic_keyboard_arrow_right_black_24dp"

@@ -116,6 +116,44 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="生产日期："/>
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:onClick="@{()->utils.onProductDateClick()}"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:text="@={utils.productDate}"
+                android:hint="请选择" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保质期："/>
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:padding="5dip"
+                android:textSize="16sp"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:background="@drawable/input_line"
+                android:text="@={utils.period}"
+                android:hint="天为单位" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="存储位置："/>
             <android.support.v7.widget.AppCompatEditText
                 android:layout_width="match_parent"

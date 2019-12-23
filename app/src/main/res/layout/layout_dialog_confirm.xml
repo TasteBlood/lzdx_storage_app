@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="utils"
+            type="com.cloudcreativity.storage.utils.ConfirmDialog" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:padding="10dip">
+        <android.support.v7.widget.AppCompatEditText
+            android:text="@={utils.content}"
+            android:hint="请输入备注"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dip"
+            android:textColor="@color/gray_515151"
+            android:lines="3"
+            android:gravity="top"
+            android:background="@drawable/input_rect"/>
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/Button"
+            android:layout_marginTop="10dip"
+            android:onClick="@{()->utils.onOk()}"
+            android:text="确定"/>
+    </LinearLayout>
+</layout>

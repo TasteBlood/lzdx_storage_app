@@ -61,7 +61,9 @@ public class BuyAddPriceUtils extends Dialog {
             return;
         }
         if(this.onOkListener!=null){
-            this.onOkListener.onOk(provider.get(),Float.parseFloat(price.get()));
+            assert price.get()!=null;
+            double temp = Double.parseDouble(price.get());
+            this.onOkListener.onOk(provider.get(),temp);
         }
         dismiss();
         provider.set(null);
@@ -69,6 +71,6 @@ public class BuyAddPriceUtils extends Dialog {
     }
 
     public interface OnOkListener{
-        void onOk(Provider.Entity entity,float price);
+        void onOk(Provider.Entity entity,double price);
     }
 }

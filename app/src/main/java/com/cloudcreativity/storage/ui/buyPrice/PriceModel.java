@@ -24,6 +24,8 @@ import com.cloudcreativity.storage.utils.HttpUtils;
 import com.cloudcreativity.storage.utils.StrUtils;
 import com.cloudcreativity.storage.utils.ToastUtils;
 
+import java.math.BigDecimal;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -31,6 +33,9 @@ public class PriceModel extends BaseModel<BaseActivity, ActivityPriceBinding> {
 
     //采购单对象
     public BuyOrder.Entity entity;
+
+    //上次的供应商对象，默认为上次的供应商对象
+    private Provider.Entity providerEntity;
 
     public BaseBindingRecyclerViewAdapter<BuyGoods.Entity, ItemLayoutPriceOrderItemBinding> allAdapter;
 
@@ -40,9 +45,6 @@ public class PriceModel extends BaseModel<BaseActivity, ActivityPriceBinding> {
         super(context, binding, baseDialog);
         this.entity = entity;
         loadAllGoods();
-        priceUtils = new BuyAddPriceUtils(PriceModel.this.context,
-                R.style.myProgressDialogStyle,
-                PriceModel.this.context);
     }
 
     @Override
@@ -71,10 +73,13 @@ public class PriceModel extends BaseModel<BaseActivity, ActivityPriceBinding> {
                 binding.tvPriceNow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        priceUtils = new BuyAddPriceUtils(PriceModel.this.context,
+                                R.style.myProgressDialogStyle,
+                                PriceModel.this.context);
+                        priceUtils.setProvider(providerEntity);
                         priceUtils.setOnOkListener(new BuyAddPriceUtils.OnOkListener() {
                             @Override
-                            public void onOk(Provider.Entity entity, float price) {
+                            public void onOk(Provider.Entity entity, double price) {
                                 //处理采价
                                 pushPrice(entity,price, item);
                             }
@@ -130,13 +135,17 @@ public class PriceModel extends BaseModel<BaseActivity, ActivityPriceBinding> {
     }
 
     void onResult(Provider.Entity entity) {
+        this.providerEntity = entity;
         this.priceUtils.setProvider(entity);
     }
 
-    private void pushPrice(Provider.Entity provider, float price, BuyGoods.Entity goods) {
+    private void pushPrice(Provider.Entity provider, double price, BuyGoods.Entity goods) {
+        BigDecimal d1 = new BigDecimal(Double.toString(price));
+        BigDecimal d2 = new BigDecimal("100");
+
         HttpUtils.getInstance().addBuyPriceRecord(goods.getId(),
                 provider.getId(),
-                Float.valueOf(price * 100).intValue(),
+                d1.multiply(d2).intValue(),
                 "",
                 entity.getId())
                 .subscribeOn(Schedulers.io())
@@ -144,7 +153,9 @@ public class PriceModel extends BaseModel<BaseActivity, ActivityPriceBinding> {
                 .subscribe(new DefaultObserver<BaseResult>(getBaseDialog(), true) {
                     @Override
                     public void onSuccess(BaseResult baseResult) {
-                        //ToastUtils.showShortToast(context, "添加询价成功");
+                        //添加询价成功，刷新页面
+                        loadAllGoods();
+
                     }
 
                     @Override
@@ -155,12 +166,13 @@ public class PriceModel extends BaseModel<BaseActivity, ActivityPriceBinding> {
     }
 
     private void loadAllGoods() {
-        HttpUtils.getInstance().getBuyGoods(entity.getId())
+        HttpUtils.getInstance().getBuyGoods(entity.getId(),1,100)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DefaultObserver<BuyGoods>(getBaseDialog(), true) {
                     @Override
                     public void onSuccess(BuyGoods buyGoods) {
+                        allAdapter.getItems().clear();
                         allAdapter.getItems().addAll(buyGoods.getInfo().getList());
                     }
 

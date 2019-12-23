@@ -1,6 +1,7 @@
 package com.cloudcreativity.storage.ui.enter;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -18,6 +19,9 @@ import com.cloudcreativity.storage.utils.ToastUtils;
 import java.io.IOException;
 
 public class EnterStoreActivity extends BaseActivity {
+
+    private RequestListFragment fragment;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +43,7 @@ public class EnterStoreActivity extends BaseActivity {
     private void init(){
         ActivityEnterStoreBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_enter_store);
         binding.setModel(new EnterStoreModel(this,binding,this));
+        fragment = (RequestListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_enter_list);
     }
 
     @Override
@@ -65,5 +70,11 @@ public class EnterStoreActivity extends BaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_CANCELED)return;
     }
 }

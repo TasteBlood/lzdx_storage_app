@@ -56,10 +56,19 @@ public class BuyOrder extends BaseResult implements Serializable{
         private int mainState;
         private String mainReason;
         private String price;
+        private String fileUrl;
         // =2 餐饮采价，入库时需要调用其他接口
         private int wayState;
         private MethodDomain methodDomain;
         private List<ApprovalDomains> approvalDomains;
+
+        public String getFileUrl() {
+            return fileUrl;
+        }
+
+        public void setFileUrl(String fileUrl) {
+            this.fileUrl = fileUrl;
+        }
 
         public int getWayState() {
             return wayState;
