@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
 
 import com.cloudcreativity.storage.base.BaseActivity;
 import com.cloudcreativity.storage.base.BaseDialogImpl;
@@ -19,7 +20,7 @@ import com.cloudcreativity.storage.databinding.ActivityApproveIndexBinding;
  */
 public class ApproveIndexModel extends BaseModel<BaseActivity, ActivityApproveIndexBinding> {
 
-    ApproveIndexModel(BaseActivity context, ActivityApproveIndexBinding binding, BaseDialogImpl baseDialog) {
+    ApproveIndexModel(final BaseActivity context, ActivityApproveIndexBinding binding, BaseDialogImpl baseDialog) {
         super(context, binding, baseDialog);
 
         binding.tabApprove.setupWithViewPager(binding.vpApprove);
@@ -27,6 +28,13 @@ public class ApproveIndexModel extends BaseModel<BaseActivity, ActivityApproveIn
         Fragment[] fragments = {new ApproveUnpassFragment(),new ApprovePassFragment()};
         binding.vpApprove.setOffscreenPageLimit(2);
         binding.vpApprove.setAdapter(new MyPageAdapter(context.getSupportFragmentManager(),titles,fragments));
+        binding.tlbApprove.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.finish();
+            }
+        });
+
     }
 
     @Override

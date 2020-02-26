@@ -37,7 +37,7 @@ public class HttpUtils {
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 100);//100M的缓存
         //初始化OkHttp
         OkHttpClient client = new OkHttpClient().newBuilder()
-                .readTimeout(APIService.timeOut, TimeUnit.SECONDS)
+                .readTimeout(APIService.timeOut, TimeUnit.MINUTES)
                 .connectTimeout(APIService.timeOut, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
                 .addNetworkInterceptor(new HttpCacheInterceptor())

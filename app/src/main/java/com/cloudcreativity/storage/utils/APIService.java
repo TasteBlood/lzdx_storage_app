@@ -20,7 +20,7 @@ public interface APIService {
     /**
      * 整体的接口配置
      */
-    String TEST_HOST = "http://192.168.31.196:8087/";
+    String TEST_HOST = "http://192.168.31.196:8070/";
 //    String TEST_HOST = "http://store-service-landa.lz-cc.com/";
     String ONLINE_HOST = "http://store-service-landa.lz-cc.com/";
     String HOST_APP = AppConfig.DEBUG ? TEST_HOST : ONLINE_HOST;
